@@ -446,7 +446,7 @@ void GEQ(string operat)
 			PUSHSEM(Res);
 		}
 		else {
-			Error(token_g.row, token_g.content, "类型不匹配");
+			Error(token.row, token.content, "类型不匹配");
 		}
 	}
 }
