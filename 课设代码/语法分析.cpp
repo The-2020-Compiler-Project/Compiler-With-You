@@ -101,7 +101,6 @@ int Variable_Type()
 		return 0;
 }
 
-
 int Const_Declaration()
 {//常量声明
 	if (token.content == "const")
