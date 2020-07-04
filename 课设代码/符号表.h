@@ -74,3 +74,28 @@ extern FuncSheet* funcSheet_g;					   //函数表指针
 extern vector<ParaSheet*>* paras_g;				   //参数表指针
 extern ParaSheet* para_g;						   //参数表项指针
 extern LevelAndOffsetAndValue* levelAndOffsetAndValue_g;		   //LevelAndOffset表指针
+
+
+void ErrorAndShow(int col, string tmp, string tmp2);//报错函数
+
+
+
+//表的删除***********************************
+
+
+/*高级清理函数*/
+void clearLists();			//释放所用存入表中的指针
+void clearAll_g();			//释放所有全局指针
+void clearGlobalVariable();	//释放全局变量（由globalsynbollistToFunc_g指向）
+/*高级清理函数*/
+
+/*底层清理函数*/
+void deleteMainSheet(MainSheet* mainSheet_p);	//完全销毁一个MainSheet对象
+void deleteTypeSheet(TypeSheet* typeSheet_p);	//完全销毁一个TypeSheet对象
+void deleteLevelAndOffsetAndValue(LevelAndOffsetAndValue* levelAndOffsetAndValue_p);	//完全销毁一个levelAndOffset对象
+void deleteFuncSheet(FuncSheet* funcSheet_p);   //完全销毁一个FuncSheet对象
+void deletePara(ParaSheet* para_p);				//完全销毁一个ParaSheet对象
+/*底层清理函数*/
+
+
+//表的删除***********************************
