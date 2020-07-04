@@ -3,7 +3,6 @@
 #include<iostream>
 
 //表的结构定义*****************************
-
 struct TypeSheet;
 struct MainSheet;
 struct ArrSheet;
@@ -61,11 +60,9 @@ struct SynbollistToFunc {		//一个函数对应一张符号表
 	string func;
 	int offset_max;				//当前offset最大值
 };
-
 //表的结构定义*****************************
 
 //表的存储*********************************
-
 extern vector<SynbollistToFunc*> synbollist_main_g;        //符号总表 
 extern SynbollistToFunc* synbollistToFunc_g;			   //函数所对应的符号表的指针
 extern SynbollistToFunc* globalsynbollistToFunc_g;		   //全局变量所要填入的地方	
@@ -75,7 +72,6 @@ extern FuncSheet* funcSheet_g;					   //函数表指针
 extern vector<ParaSheet*>* paras_g;				   //参数表指针
 extern ParaSheet* para_g;						   //参数表项指针
 extern LevelAndOffsetAndValue* levelAndOffsetAndValue_g;		   //LevelAndOffset表指针
-
 //表的存储*********************************
 
 
@@ -83,8 +79,6 @@ void ErrorAndShow(int col, string tmp, string tmp2);//报错函数
 
 
 //表的删除***********************************
-
-
 /*高级清理函数*/
 void clearLists();			//释放所用存入表中的指针
 void clearAll_g();			//释放所有全局指针
@@ -98,12 +92,9 @@ void deleteLevelAndOffsetAndValue(LevelAndOffsetAndValue* levelAndOffsetAndValue
 void deleteFuncSheet(FuncSheet* funcSheet_p);   //完全销毁一个FuncSheet对象
 void deletePara(ParaSheet* para_p);				//完全销毁一个ParaSheet对象
 /*底层清理函数*/
-
-
 //表的删除***********************************
 
 //检查重定义（常量表）*********************************
-
 bool checkGlobalNum(string str);
 bool checkSynbollistToFuncNum(string str);
 
@@ -111,15 +102,12 @@ void checkSynbollist_main(string str);		//查重符号总表
 void checkSynbollistToFunc(string funcId, string str);		//查重函数符号表
 void checkParas(string str);				//查重形参表
 void checkGlobal(string str);				//查重全局变量
-
 //检查重定义（常量表）*********************************
 
 //单张表的填写****************************************
-
 void writeTypeSheet(string type);							//写一张类型表 参数:类型
 void writeLevelAndOffsetAndValue(int level,int offset);		//写一张LevelAndOffsetAndValue表，value暂时填不了
 void showErrowWhenCreateASheet(string str);
-
 //单张表的填写****************************************
 
 //表的输出********************************************
@@ -130,4 +118,14 @@ void printfFuncSheet(FuncSheet* funcsheet);					//函数表输出
 void printParaSheet(ParaSheet* paraSheet);					//输出形参表
 //表的输出********************************************
 
+//查表与填表******************************************
+string searchType(string funcname, string name);//查非全局用户定义和临时变量类型
+string searchType(string name);//查全局用户定义变量类型
+string searchValue(string funcname, string name);//查非全局变量和临时变量值
+string searchValue(string name);//查全局用户定义变量值
+void saveTemp(string funcname, string name, string type, string value);//保存临时变量类型和值
+void saveAdmin(string funcname, string name, string value);//保存用户的非全局变量的类型和值
+void saveGlobal(string name, string value);			//保存用户定义的全局变量
+void saveGlobal(string name, string type, string value); //保存临时全局变量
+//查表与填表******************************************
 

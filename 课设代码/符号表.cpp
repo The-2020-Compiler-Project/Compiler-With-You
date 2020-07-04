@@ -243,3 +243,208 @@ void printParaSheet(ParaSheet* paraSheet) {					//输出形参表
 	cout << endl;
 }
 /*底层输出函数*/
+
+void saveTemp(string funcname, string name, string type, string value) {//保存临时变量类型和值
+	for (unsigned i = 0; i < synbollist_main_g.size(); i++) {
+		if (funcname == synbollist_main_g.at(i)->func) {
+			MainSheet* tempMainSheet;
+			
+			tempMainSheet = new MainSheet;
+			tempMainSheet->content = name;
+			tempMainSheet->category = "vt";
+			tempMainSheet->flag = 1;
+				writeTypeSheet(type);
+				tempMainSheet->type = typeSheet_g;
+				typeSheet_g = NULL;
+				writeLevelAndOffsetAndValue(((LevelAndOffsetAndValue*)(synbollist_main_g.at(i)->synbollist.at(0)->addr))->level, synbollist_main_g.at(i)->offset_max);
+				if (type == "char") {
+					synbollist_main_g.at(i)->offset_max += 1;
+				}
+				else if (type == "int") {
+					synbollist_main_g.at(i)->offset_max += 4;
+				}
+				else if (type == "double") {
+					synbollist_main_g.at(i)->offset_max += 8;
+				}
+				else if (type == "float") {
+					synbollist_main_g.at(i)->offset_max += 4;
+				}
+				levelAndOffsetAndValue_g->value = value;
+				tempMainSheet->addr = levelAndOffsetAndValue_g;
+				levelAndOffsetAndValue_g = NULL;
+				synbollist_main_g.at(i)->synbollist.push_back(tempMainSheet);
+				tempMainSheet = NULL;
+				return;
+			
+		}
+	}
+
+	if (synbollistToFunc_g != NULL && synbollistToFunc_g->func == funcname) {
+		MainSheet* tempMainSheet;
+		
+			tempMainSheet = new MainSheet;
+			tempMainSheet->content = name;
+			tempMainSheet->category = "vt";
+			tempMainSheet->flag = 1;
+			writeTypeSheet(type);
+			tempMainSheet->type = typeSheet_g;
+			typeSheet_g = NULL;
+			writeLevelAndOffsetAndValue(((LevelAndOffsetAndValue*)(synbollistToFunc_g->synbollist.at(0)->addr))->level, synbollistToFunc_g->offset_max);
+			if (type == "char") {
+				synbollistToFunc_g->offset_max += 1;
+			}
+			else if (type == "int") {
+				synbollistToFunc_g->offset_max += 4;
+			}
+			else if (type == "double") {
+				synbollistToFunc_g->offset_max += 8;
+			}
+			else if (type == "float") {
+				synbollistToFunc_g->offset_max += 4;
+			}
+			levelAndOffsetAndValue_g->value = value;
+			tempMainSheet->addr = levelAndOffsetAndValue_g;
+			levelAndOffsetAndValue_g = NULL;
+			synbollistToFunc_g->synbollist.push_back(tempMainSheet);
+			tempMainSheet = NULL;
+		
+	}
+
+}
+void saveAdmin(string funcname, string name, string value) {//保存用户的非全局变量的类型和值
+	for (unsigned i = 0; i < synbollist_main_g.size(); i++) {
+		if (funcname == synbollist_main_g.at(i)->func) {
+			for (unsigned j = 0; j < synbollist_main_g.at(i)->synbollist.size(); j++) {
+				if (name == synbollist_main_g.at(i)->synbollist.at(j)->content) {
+					((LevelAndOffsetAndValue*)synbollist_main_g.at(i)->synbollist.at(j)->addr)->value = value;
+					return;
+				}
+			}
+		}
+	}
+	for (unsigned i = 0; i < synbollistToFunc_g->synbollist.size(); i++) {
+		if (name == synbollistToFunc_g->synbollist.at(i)->content) {
+			((LevelAndOffsetAndValue*)(synbollistToFunc_g->synbollist.at(i))->addr)->value = value;
+		}
+	}
+}
+void saveGlobal(string name, string value) {			//保存用户定义的全局变量
+	unsigned i = 0;
+	for (i = 0; i < globalsynbollistToFunc_g->synbollist.size(); i++) {
+		if (name == globalsynbollistToFunc_g->synbollist.at(i)->content) {
+			((LevelAndOffsetAndValue*)(globalsynbollistToFunc_g->synbollist.at(i)->addr))->value = value;
+			break;
+		}
+	}
+	if (i == globalsynbollistToFunc_g->synbollist.size()) {
+		cout << "没查到要存的变量" << endl;
+	}
+}
+
+void saveGlobal(string name, string type, string value) {			//保存全局临时变量
+	
+	if (mainSheet_g == NULL) {
+		mainSheet_g = new MainSheet;
+		mainSheet_g->content = name;
+		mainSheet_g->category = "vt";
+		mainSheet_g->flag = 1;
+		writeTypeSheet(type);
+		mainSheet_g->type = typeSheet_g;
+		typeSheet_g = NULL;
+		writeLevelAndOffsetAndValue(0, global_offset_g);
+		if (type == "char") {
+			global_offset_g += 1;
+		}
+		else if (type == "int") {
+			global_offset_g += 4;
+		}
+		else if (type == "double") {
+			global_offset_g += 8;
+		}
+		else if (type == "float") {
+			global_offset_g += 4;
+		}
+		levelAndOffsetAndValue_g->value = value;
+		mainSheet_g->addr = levelAndOffsetAndValue_g;
+		levelAndOffsetAndValue_g = NULL;
+		globalsynbollistToFunc_g->synbollist.push_back(mainSheet_g);
+		mainSheet_g = NULL;
+	}
+	else {
+		showErrowWhenCreateASheet("MainSheet");
+	}
+	
+}
+
+void writeGlobalToFile(string fileName) {
+	ofstream ofs(fileName,ios::app);
+	for (unsigned i = 0; i < globalsynbollistToFunc_g->synbollist.size(); i++) {
+		writeMainSheetToFile(fileName, globalsynbollistToFunc_g->synbollist.at(i));
+	}
+	ofs.close();
+}
+void writeSynbollistMain_gToFile(string fileName) {
+	ofstream ofs(fileName,ios::app);
+	for (unsigned int i = 0; i < synbollist_main_g.size(); i++) {
+		for (unsigned int j = 0; j < synbollist_main_g.at(i)->synbollist.size(); j++) {
+			writeMainSheetToFile(fileName, synbollist_main_g.at(i)->synbollist.at(j));
+		}
+	}
+	ofs.close();
+}
+
+
+void writeMainSheetToFile(string funcName, MainSheet* mainSheet) {
+	ofstream ofs(funcName,ios::app);
+	ofs << "MainSheet表内容: " << endl;
+	ofs << "标识符名字: " << mainSheet->content << endl;
+	ofs << "标识符类型: " << endl; printTypeSheet(mainSheet->type);
+	ofs << "标识符种类: " << mainSheet->category << endl;
+	if (mainSheet->flag == 0) {
+		writeFuncSheetToFile(funcName, (FuncSheet*)mainSheet->addr);
+	}
+	else if (mainSheet->flag == 1) {
+		writeLevelAndOffsetAndValueToFile(funcName, (LevelAndOffsetAndValue*)mainSheet->addr);
+	}
+	ofs << endl;
+	ofs.close();
+}
+void writeTypeSheetToFile(string funcName, TypeSheet* typeSheet) {
+	ofstream ofs(funcName,ios::app);
+	ofs << "----" << "TypeSheet表内容: " << endl;
+	ofs << "    " << "typeValue: " << typeSheet->typevalue << endl;
+	//因为目前没有数组和结构体所以typeSheet的指针项为空
+	ofs << endl;
+	ofs.close();
+}
+void writeLevelAndOffsetAndValueToFile(string funcName, LevelAndOffsetAndValue* levelAndOffsetAndValue) {
+	ofstream ofs(funcName,ios::app);
+	ofs << "----" << "LevelAndOffsetAndValue表内容: " << endl;
+	ofs << "    " << "level:  " << levelAndOffsetAndValue->level << endl;
+	ofs << "    " << "offset: " << levelAndOffsetAndValue->offset << endl;
+	ofs << "    " << "vlaue:  " << levelAndOffsetAndValue->value << endl;
+	ofs << endl;
+	ofs.close();
+}
+void writeFuncSheetToFile(string funcName, FuncSheet* funcsheet) {
+	ofstream ofs(funcName,ios::app);
+	ofs << "----" << "函数表内容: " << endl;
+	ofs << "    " << "函数层次: " << funcsheet->level << endl;
+	ofs << "    " << "形参个数: " << funcsheet->fnum << endl;
+	ofs << "    " << "入口地址: " << funcsheet->entry << endl;
+	ofs << "    " << "参数表: " << endl;
+	for (unsigned i = 0; i < funcsheet->para->size(); i++) {
+		writeParaSheetToFile(funcName, funcsheet->para->at(i));
+	}
+	ofs << endl;
+	ofs.close();
+}
+void writeParaSheetToFile(string funcName, ParaSheet* paraSheet) {
+	ofstream ofs(funcName,ios::app);
+	ofs << "----" << "Para表内容: " << endl;
+	ofs << "    " << "形参名: " << paraSheet->content << endl;
+	ofs << "    " << "形参类型: "; writeTypeSheetToFile(funcName, paraSheet->type);
+	ofs << "    " << "形参表的LevelAndOffsetAndValue表: "; writeLevelAndOffsetAndValueToFile(funcName, paraSheet->addr);
+	ofs << endl;
+	ofs.close();
+}
