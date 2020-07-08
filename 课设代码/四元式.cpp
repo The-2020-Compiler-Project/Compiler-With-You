@@ -15,6 +15,9 @@ string value_2;
 token left_n;
 token right_n;
 token res_n;
+token null_point;
+null_point.name = "";
+null_point.type = 0;
 vector<QT>qt;
 mystack<token> SEM;
 
@@ -174,7 +177,7 @@ bool CompareType()
 					type_1 = searchType(SEM.SEC().name, SEM.SEC().name);
 					left_n.name = SEM.SEC().name + to_string(func_num++);
 					if (type_1 == "no") {
-						Error(token.row, token.content, "标识符未定义");
+						Error(token_g.row, token_g.content, "标识符未定义");
 						return false;
 					}
 				}
@@ -197,7 +200,7 @@ bool CompareType()
 					type_2 = searchType(SEM.TOP().name, SEM.TOP().name);
 					right_n.name = SEM.TOP().name + to_string(func_num);
 					if (type_2 == "no") {
-						Error(token.row, token.content, "标识符未定义");
+						Error(token_g.row, token_g.content, "标识符未定义");
 						return false;
 					}
 				}
@@ -225,7 +228,7 @@ string resvalue(string opeart)
 					if (type == "no") {
 						type = searchType(SEM.TOP().name, SEM.TOP().name);
 						if (type == "no") {
-							Error(token.row, token.content, "标识符未定义");
+							Error(token_g.row, token_g.content, "标识符未定义");
 							return false;
 						}
 					}
@@ -244,7 +247,7 @@ string resvalue(string opeart)
 				if (value_1 == "no") {
 					value_1 = searchValue(SEM.SEC().name, SEM.SEC().name);
 					if (value_1 == "no") {
-						Error(token.row, token.content, "标识符未赋值");
+						Error(token_g.row, token_g.content, "标识符未赋值");
 					}
 				}
 			}
@@ -261,7 +264,7 @@ string resvalue(string opeart)
 				if (value_2 == "no") {
 					value_2 = searchValue(SEM.TOP().name, SEM.TOP().name);
 					if (value_2 == "no") {
-						Error(token.row, token.content, "标识符未赋值");
+						Error(token_g.row, token_g.content, "标识符未赋值");
 					}
 				}
 			}
@@ -420,7 +423,7 @@ void GEQ(string operat)
 		Res.type = 3;//type=3表示临时变量
 		Res.active = false;
 
-		res_n.type = 3;//写入四元式的临时变量
+		res_n.type = 3;//写入四元式的结果
 		if (func_name != "no")//判断函数中的变量or全局变量
 			res_n.name = ress + func_name;
 		else
@@ -446,7 +449,7 @@ void GEQ(string operat)
 			PUSHSEM(Res);
 		}
 		else {
-			Error(token.row, token.content, "类型不匹配");
+			Error(token_g.row, token_g.content, "类型不匹配");
 		}
 	}
 }
@@ -494,7 +497,7 @@ void ASSI()
 				}
 			}
 			else
-				Error(token.row, token.content, "类型不匹配");
+				Error(token_g.row, token_g.content, "类型不匹配");
 		}
 		else if (func_name == "no") //等号右侧是用户定义的全局变量
 		{
@@ -506,7 +509,7 @@ void ASSI()
 					saveGlobal(SEM.SEC().name, searchValue(SEM.TOP().name));
 			}
 			else
-				Error(token.row, token.content, "类型不匹配");
+				Error(token_g.row, token_g.content, "类型不匹配");
 		}
 	}
 
@@ -523,7 +526,7 @@ void ASSI()
 						if (searchValue(SEM.TOP().name, SEM.TOP().name) == "no")
 						{//
 							flag = 1;
-							Error(token.row, token.content, "变量未赋值");
+							Error(token_g.row, token_g.content, "变量未赋值");
 						}
 						else
 							saveAdmin(func_name, SEM.SEC().name, searchValue(SEM.TOP().name, SEM.TOP().name));
@@ -535,7 +538,7 @@ void ASSI()
 					saveAdmin(func_name, SEM.SEC().name, searchValue(func_name, SEM.TOP().name));
 			}
 			else
-				Error(token.row, token.content, "类型不匹配");
+				Error(token_g.row, token_g.content, "类型不匹配");
 		}
 		else if (func_name == "no") //是用户定义的全局变量
 		{
@@ -548,7 +551,7 @@ void ASSI()
 						if (searchValue(SEM.TOP().name, SEM.TOP().name) == "no")
 						{
 							flag = 1;
-							Error(token.row, token.content, "变量未赋值");
+							Error(token_g.row, token_g.content, "变量未赋值");
 						}
 						else
 							saveGlobal(SEM.SEC().name, searchValue(SEM.TOP().name, SEM.TOP().name));
@@ -560,7 +563,7 @@ void ASSI()
 					saveGlobal(SEM.SEC().name, searchValue(func_name, SEM.TOP().name));
 			}
 			else
-				Error(token.row, token.content, "类型不匹配");
+				Error(token_g.row, token_g.content, "类型不匹配");
 		}
 	}
 
@@ -574,4 +577,87 @@ void ASSI()
 	//清空两个元素后指向栈顶元素
 	SEM.POP();
 	SEM.POP();
+}
+
+void IF()/*if语句四元式生成：运算符if   第一运算对象为栈顶元素SEM[sem],第二运算对象和结果为空
+		 栈顶元素弹栈*/
+{
+	token null_point;
+	null_point.name = "";
+	null_point.type = 0;
+
+	qt.push_back({ "if", right_n, null_point, null_point });
+
+	SEM.POP();
+}
+void EL()/*else语句四元式生成：运算符el 其他为空 SEM无操作*/
+{
+	token null_point;
+	null_point.name = "";
+	null_point.type = 0;
+
+	qt.push_back({ "el", null_point , null_point , null_point });
+}
+void IE()/*结束四元式：运算符ie 其他为空 SEM无操作*/
+{
+	token null_point;
+	null_point.name = "";
+	null_point.type = 0;
+
+	qt.push_back({ "ie",null_point , null_point, null_point });
+}
+void WH()/*while循环头函数：wh 其他为空 SEM无操作*/
+{
+	token null_point;
+	null_point.name = "";
+	null_point.type = 0;
+
+	qt.push_back({ "wh", null_point , null_point , null_point });
+}
+void DO()/*do函数：do 第一操作数为栈顶元素 第二为空 结果为空
+		 栈顶元素弹出*/
+{
+	token null_point;
+	null_point.name = "";
+	null_point.type = 0;
+
+	qt.push_back({ "do", right_n, null_point , null_point });
+
+	SEM.POP();
+}
+void WE()/*循环尾：we 其他空 SEM无操作*/
+{
+	token null_point;
+	null_point.name = "";
+	null_point.type = 0;
+
+	qt.push_back({ "we", null_point ,null_point, null_point });
+
+}
+void RET()//RETURN语句：第一操作数
+{
+	token null_point;
+	null_point.name = "";
+	null_point.type = 0;
+
+	if (SEM.TOP().type == 3)
+	{
+		right_n.active = false;
+		right_n.name = SEM.TOP().name + func_name;
+		right_n.type = 3;
+	}
+	else if (SEM.TOP().type == 2)
+	{
+		right_n.active = false;
+		right_n.name = SEM.TOP().name + func_name;
+		right_n.type = 2;
+	}
+	else if (SEM.TOP().type == 1)
+	{
+		right_n.active = false;
+		right_n.name = SEM.TOP().name;
+		right_n.type = 1;
+	}
+
+	qt.push_back({ "RET",right_n ,null_point,null_point });
 }

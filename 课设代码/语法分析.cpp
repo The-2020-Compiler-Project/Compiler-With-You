@@ -1,48 +1,48 @@
 #include "stdio.h"
-#include "è¯­æ³•åˆ†æ.h"
-#include "ç¬¦å·è¡¨.h"
+#include "Óï·¨·ÖÎö.h"
+#include "·ûºÅ±í.h"
 
 Lexer scan;
-Token token;
+Token token_g;
 
-vector<string> T_num;//ä¸­é—´å˜é‡tåŠ¨æ€æ•°ç»„
-string id;//ä¿å­˜è¯»åˆ°çš„å•è¯
-string type;//ä¿å­˜è¯»åˆ°çš„å•è¯ç±»å‹
+vector<string> T_num;//ÖĞ¼ä±äÁ¿t¶¯Ì¬Êı×é
+string id;_g//±£´æ¶Áµ½µÄµ¥´Ê
+string type_g;//±£´æ¶Áµ½µÄµ¥´ÊÀàĞÍ
 
-string id_qt;//å››å…ƒå¼æ ‡è¯†ç¬¦
-//sting num_qt;//å››å…ƒå¼æ•°ç»„ä½ç½®
+string id_qt;//ËÄÔªÊ½±êÊ¶·û
+//sting num_qt;//ËÄÔªÊ½Êı×éÎ»ÖÃ
 
 void Error(int row, string content, string error)
-{//é”™è¯¯åˆ†æ
+{//´íÎó·ÖÎö
 	cout << error << endl;
-	cout << "é”™è¯¯è¡Œæ•°ï¼š" << row << " é”™è¯¯å†…å®¹ï¼š" << content << endl;
-	exit(1);//å¼‚å¸¸é€€å‡º
+	cout << "´íÎóĞĞÊı£º" << row << " ´íÎóÄÚÈİ£º" << content << endl;
+	exit(1);//Òì³£ÍË³ö
 }
 
 
 int Recursive()
-{//é€’å½’å­ç¨‹åºåˆ†ææ³•
-	scan.init();//åˆå§‹åŒ–
-	token = scan.next_Token();//è¯»ä¸€ä¸ªå•è¯
-	Declaration_list();//å£°æ˜åˆ—è¡¨
-	if (token.content == "$")
+{//µİ¹é×Ó³ÌĞò·ÖÎö·¨
+	scan.init();//³õÊ¼»¯
+	token_g = scan.next_Token();//¶ÁÒ»¸öµ¥´Ê
+	ZeroOrMoreDeclation();//ÉùÃ÷ÁĞ±í
+	if (token_g.content == "$")
 	{
-		cout << "è¯­æ³•åˆ†ææˆåŠŸ" << endl;
+		cout << "Óï·¨·ÖÎö³É¹¦" << endl;
 	}
 	else
 	{
-		cout << "è¯­æ³•åˆ†æå‡ºé”™" <<token.content << endl;
+		cout << "Óï·¨·ÖÎö³ö´í" <<token_g.content << endl;
 	}
 	return 0;
 }
 
 
 int Variable_Type()
-{//å˜é‡ç±»å‹
-	if (token.content == "int" || token.content == "float" || token.content == "double" || token.content == "char")
+{//±äÁ¿ÀàĞÍ
+	if (token_g.content == "int" || token_g.content == "float" || token_g.content == "double" || token_g.content == "char")
 	{
-		type = token.content;//ä¿å­˜è¯»åˆ°çš„ç±»å‹
-		token = scan.next_Token();
+		type_g = token_g.content;//±£´æ¶Áµ½µÄÀàĞÍ
+		token_g = scan.next_Token();
 		return 1;
 	}
 	else
@@ -50,14 +50,14 @@ int Variable_Type()
 }
 
 int ID()
-{//æ ‡è¯†ç¬¦
-	if (token.type == 'i')
+{//±êÊ¶·û
+	if (token_g.type == 'i')
 	{
-		id = token.content;//ä¿å­˜è¯»åˆ°çš„å•è¯
-		id_qt = token.content;//å››å…ƒå¼
-		if (token.content[0] == 't')//ç”Ÿæˆä¸­é—´å˜é‡
-			T_num.push_back(token.content);
-		token = scan.next_Token();
+		id_g = token_g.content;//±£´æ¶Áµ½µÄµ¥´Ê
+		id_qt = token_g.content;//ËÄÔªÊ½
+		if (token_g.content[0] == 't')//Éú³ÉÖĞ¼ä±äÁ¿
+			T_num.push_back(token_g.content);
+		token_g = scan.next_Token();
 		return 1;
 	}
 	else
@@ -65,75 +65,97 @@ int ID()
 }
 
 int NumCharId()
-{//åˆå§‹åŒ–å¸¸é‡å£°æ˜é‡Œçš„å˜é‡
-	if (token.type == 'n' || token.type == 'f')//æ•´æ•°æˆ–æµ®ç‚¹æ•°
+{//³õÊ¼»¯³£Á¿
+	if (token_g.type == 'n' || token_g.type == 'f')//ÕûÊı»ò¸¡µãÊı
 	{
-		token = scan.next_Token();
+		token_g = scan.next_Token();
 		return 1;
 	}
-	else if (token.type == 'c')//å­—ç¬¦
+	else if (token_g.type == 'c')//×Ö·û
 	{
-		token = scan.next_Token();
+		token_g = scan.next_Token();
 		return 1;
 	}
-	else if (ID() == 1)//æ ‡è¯†ç¬¦
+	else if (ID() == 1)//±êÊ¶·û
 		return 1;
 	else
 		return 0;
 }
 
-//å£°æ˜éƒ¨åˆ†
-int Variable_Type()
-{//å˜é‡å£°æ˜
-	if (Variable_Type() == 1)
+//ÉùÃ÷²¿·Ö
+int ZeroOrMoreDeclation()
+{
+	if (Declaration() == 1)
 	{
-		if (ID() == 1)
-		{
-			if (token.content == ";")
-				return 1;
-			else
-				Error(token.row, token.content, "ç¼ºå°‘;");
-		}
+		if (ZeroOrMoreDeclation() == 1)
+			return 1;
 		else
-			Error(token.row, token.content, "å˜é‡å£°æ˜é”™è¯¯");
+			Error(token_g.row, token_g.content, "´íÎó£¡");
 	}
+	else//¿Õ
+		return 1;
+}
+
+int Declaration()
+{
+	if (Const_Declaration() == 1)
+		return 1;
+	else if (Variable_Declaration() == 1)
+		return 1;
 	else
 		return 0;
 }
 
 int Const_Declaration()
-{//å¸¸é‡å£°æ˜
-	if (token.content == "const")
+{//³£Á¿ÉùÃ÷
+	if (token_g.content == "const")
 	{
-		token = scan.next_Token();
+		token_g = scan.next_Token();
 		if (Variable_Type() == 1)
 		{
 			if (ID() == 1)
 			{
-				if (token.content == "=")
+				if (token_g.content == "=")
 				{
-					token = scan.next_Token();
+					token_g = scan.next_Token();
 					if (NumCharID() == 1)
 					{
-						if (token.content == ";")
+						if (token_g.content == ";")
 						{
-							token = scan.next_Token;
+							token_g = scan.next_Token;
 							return 1;
 						}
 						else
-							Error(token.row, token.content, "ç¼ºå°‘;");
+							Error(token_g.row, token_g.content, "È±ÉÙ;");
 					}
 					else
-						Error(token.row, token.content, "å¸¸é‡åˆå§‹åŒ–é”™è¯¯");
+						Error(token_g.row, token_g.content, "³£Á¿³õÊ¼»¯´íÎó");
 				}
 				else
-					Error(token.row, token.content, "å¸¸é‡å£°æ˜é”™è¯¯");
+					Error(token_g.row, token_g.content, "³£Á¿ÉùÃ÷´íÎó");
 			}
 			else
-				Error(token.row, token.content, "å¸¸é‡å£°æ˜é”™è¯¯");
+				Error(token_g.row, token_g.content, "³£Á¿ÉùÃ÷´íÎó");
 		}
 		else
-			Error(token.row, token.content, "å¸¸é‡å£°æ˜é”™è¯¯");
+			Error(token_g.row, token_g.content, "³£Á¿ÉùÃ÷´íÎó");
+	}
+	else
+		return 0;
+}
+int Variable_Declaration()
+{//ÆäËû±äÁ¿ÉùÃ÷
+	if (Variable_Type() == 1)
+	{
+		if (ID() == 1)
+		{
+			if (Array_Declaration() == 1)
+				return 1;
+			else
+				Error(token_g.row, token_g.content, "È±ÉÙ;");
+		}
+		else
+			Error(token_g.row, token_g.content, "±äÁ¿ÉùÃ÷´íÎó");
 	}
 	else
 		return 0;
@@ -141,200 +163,1142 @@ int Const_Declaration()
 
 
 int Array_Declaration()
-{//æ•°ç»„å£°æ˜
+{//Êı×é¼°º¯ÊıÉùÃ÷
+	if (token_g.content == "[")
+	{
+		token_g = sacn.next_Token();
+		if (token_g.type == 'n')
+		{//Èç¹û[]ÖĞÊÇÕûĞÍ³£Êı
+			int arrLength = stringToNum<int>(token_g.content);//Éú³ÉÊıÁ¿µÈÓÚarrLengthµÄtype_gĞÍ±äÁ¿
+			if (arrLength <= 0)
+			{
+				cout << "Êı×é³¤¶ÈÓ¦¸Ã´óÓÚÁã" << endl;
+				clearLists();//ÊÍ·ÅËùÓĞ´æÈë±íÖĞµÄÖ¸Õë
+				clearGlobalVariable();//ÊÍ·ÅËùÓĞÈ«¾Ö±äÁ¿
+				//clearGlobalVariable();//ÊÍ·ÅËùÓĞÈ«¾Ö±äÁ¿
+				exit(1);
+			}
 
+			//Ê×ÏÈÅĞ¶ÏÊı×éÉùÃ÷ÊÇ²»ÊÇÈ«¾ÖµÄ
+			if (synbollistToFunc_g != NULL)
+			{//º¯Êı¶ÔÓ¦µÄ·ûºÅ±íÖ¸ÕëÊÇ¾Ö²¿µÄ
+
+				//²åÈëÒ»¸öÕ¼Î»·ûºÅ
+				if (mainSheet_g == NULL)
+				{//ĞÂ½¨·ûºÅ±íÖ¸Õë
+					mainSheet_g = new MainSheet;
+				}
+				else
+				{
+					showErrowWhenCreateASheet("MainSheet");
+				}
+				//ÌîÈë·ûºÅ×Ü±í
+				mainSheet_g->content = id_g;//±êÊ¶·ûÃû
+				writeLevelAndOffsetAndValue(-1, -1);//²ã´Î¡¢Æ«ÒÆÁ¿³õÊ¼»¯Îª-1
+				mainSheet_g->addr = levelAndOffsetAndValue_g;//Ö¸ÏòĞÅÏ¢±í
+				levelAndOffsetAndValue_g = NULL;//³õÊ¼»¯Ö¸ÕëÔÙÀûÓÃ
+
+				writeTypeSheet(type_g);//ÌîĞ´ÀàĞÍ±í
+				mainSheet_g->type = typeSheet_g;//¸ù¾İÀàĞÍ±í½²ÀàĞÍÌîµ½×Ü±í
+				typeSheet_g = NULL;//³õÊ¼»¯Ö¸ÕëÔÙÀûÓÃ
+
+				synbollistToFunc_g->synbollist.push_back(mainSheet_g);//º¯ÊıËù¶ÔÓ¦µÄ·ûºÅ±íµÄÖ¸Õë
+				mainSheet_g = NULL;
+
+				for (int i = 0; i < arrLength; i++)
+				{//½«Êı×éÔªËØÒÀ´ÎÌîÈë
+					string currentArrId = id_g + "[" + to_string(i) + "]";//Òª´æÈë·ûºÅ±íµÄ±äÁ¿Ãû£¬ÒÔ·ûºÅ´®ĞÎÊ½±£´æ
+
+					checkSynbollistToFunc(synbollistToFunc_g->func, currentArrId);//²éº¯Êı·ûºÅ±í£¬¼ì²éÊÇ·ñÖØ¶¨Òå
+
+					if (mainSheet_g == NULL)
+					{//ĞÂ½¨·ûºÅ×Ü±í
+						mainSheet_g = new MainSheet;
+					}
+					else
+					{
+						showErrowWhenCreateASheet("MainSheet");
+					}
+					mainSheet_g->content = currentArrId;//ÌîÃû×Ö
+					mainSheet_g->category = "v";//ÖÖÀàÊÇ±äÁ¿
+					mainSheet_g->flag = 1;//ÅĞ¶ÏµØÖ·Ö¸Ïò±íÀàĞÍ
+
+					writeTypeSheet(type_g);
+					mainSheet_g->type = typeSheet_g;
+					typeSheet_g = NULL;
+
+					writeLevelAndOffsetAndValue(((FuncSheet*)(synbollistToFunc_g->synbollist.at(0)->addr))->level, offset_g);//ÌîĞ´²ã´Î£¿ºÍÆ«ÒÆ
+					if (type_g == "int" || type_g == "float")
+					{
+						offset_g += 4;
+					}
+					else if (type_g == "char")
+					{
+						offset_g += 1;
+					}
+					else if (type_g == "double")
+					{
+						offset_g += 8;
+					}
+					else
+					{
+						cout << "³öÏÖÎ´ÖªÀàĞÍ" << type_g << ",Æä³¤¶È°´ÕÕ2¸ö×Ö½Ú¼ÆËã" << endl;
+						offset_g += 2;
+					}
+					//ÖÁ´ËÒ»¸öLevelAndOffset±íÌîÍê
+					mainSheet_g->addr = levelAndOffsetAndValue_g;
+					levelAndOffsetAndValue_g = NULL;
+					synbollistToFunc_g->synbollist.push_back(mainSheet_g);
+					mainSheet_g = NULL;
+				}
+			}
+			else
+			{//ÊÇÈ«¾ÖµÄ
+				//²åÈëÒ»¸öÕ¼Î»·ûºÅ
+				if (mainSheet_g == NULL)
+				{
+					mainSheet_g = new MainSheet;
+				}
+				else
+				{
+					showErrowWhenCreateASheet("MainSheet");
+				}
+				//²Ù×÷Óë·ÇÈ«¾ÖÀàËÆ
+				mainSheet_g->content = id_g;
+				writeLevelAndOffsetAndValue(-1, -1);
+				mainSheet_g->addr = levelAndOffsetAndValue_g;
+				levelAndOffsetAndValue_g = NULL;
+
+				writeTypeSheet(type_g);
+				mainSheet_g->type = typeSheet_g;
+				typeSheet_g = NULL;
+
+				globalsynbollistToFunc_g->synbollist.push_back(mainSheet_g);//È«¾Ö±äÁ¿ÒªÒª²åÈëµÄÖ¸Õëglobal
+				mainSheet_g = NULL;
+
+				for (int i = 0; i < arrLength; i++) {
+					string currentArrId = id_g + "[" + to_string(i) + "]";//Òª´æÈë·ûºÅ±íµÄ±äÁ¿Ãû
+
+					checkGlobal(currentArrId);//²éÖØÈ«¾Ö±äÁ¿
+
+					if (mainSheet_g == NULL)
+					{
+						mainSheet_g = new MainSheet;
+					}
+					else
+					{
+						showErrowWhenCreateASheet("MainSheet");
+					}
+					mainSheet_g->content = currentArrId;
+					mainSheet_g->category = "v";
+					mainSheet_g->flag = 1;
+
+					writeTypeSheet(type_g);
+					mainSheet_g->type = typeSheet_g;
+					typeSheet_g = NULL;
+
+					writeLevelAndOffsetAndValue(0, global_offset_g);//È«¾Ö±äÁ¿ÌîÔÚµÚÒ»²ã
+
+					mainSheet_g->addr = levelAndOffsetAndValue_g;
+					levelAndOffsetAndValue_g = NULL;
+					globalsynbollistToFunc_g->synbollist.push_back(mainSheet_g);
+					mainSheet_g = NULL;
+
+					if (type_g == "int" || type_g == "float")
+					{
+						global_offset_g += 4;//È«¾ÖoffetÖµ
+					}
+					else if (type_g == "char")
+					{
+						global_offset_g += 1;
+					}
+					else if (type_g == "double")
+					{
+						global_offset_g += 8;
+					}
+					else {
+						cout << "³öÏÖÎ´ÖªÀàĞÍ" << type_g << ",Æä³¤¶È°´ÕÕ2¸ö×Ö½Ú¼ÆËã" << endl;
+						global_offset_g += 2;
+					}
+				}
+			}
+
+			token_g = scan.next_Token();
+			if (token_g.content == "]")
+			{
+				token_g = scan.next_Token();
+				if (EqualStringOrNumOrNull() == 1)
+				{//Êı×éÉùÃ÷ºó³õÊ¼»¯
+					if (token_g.content == ";") {
+						token_g = scan.next_Token();
+						return 1;
+					}
+					else {
+						Error(token_g.row, token_g.content, "ÔÚÓ¦¸ÃÊÇ';'µÄµØ·½²»ÕıÈ·");
+					}
+				}
+				else {
+					Error(token_g.row, token_g.content, "Êı×é»ò×Ö·û´®²»ÕıÈ·");
+				}
+			}
+			else {
+				Error(token_g.row, token_g.content, "±äÁ¿»òÊı×é¶¨Òå²»ÕıÈ·");
+			}
+		}
+		else {
+			Error(token_g.row, token_g.content, "±äÁ¿»òÊı×é¶¨Òå²»ÕıÈ·");
+		}
+	}
+
+	else if (token_g.content == "=")
+	{// Èç¹ûÍÆµ¼µ½ÁËÕâÀï£¬ËµÃ÷ÔÚÉùÃ÷Ê±¶Ô±äÁ¿³õÊ¼»¯¡£Èç£ºint a = 1;
+		/*ÓïÒå¶¯×÷¿ªÊ¼£¬ÕâÀïÊÇÌî·ûºÅ±íµÄÊ±»ú*/
+		token in;
+		in = { id_qt,2,false };//±êÊ¶·ûÃû£¬2±íÊ¾·ÇÁÙÊ±±äÁ¿£¬»îÔ¾ĞÅÏ¢³õÊ¼»¯Îªfalse
+		PUSHSEM(in);//Ñ¹ÈëÓïÒåÕ»
+
+		if (synbollistToFunc_g != NULL)
+		{//ËµÃ÷ÉùÃ÷µÄÊÇ¾Ö²¿±äÁ¿£¬ÓëÇ°ÃæµÄÅĞ¶ÏÊı×éÖĞÃ¿¸öÔªËØµÄ·½·¨Ò»ÖÂ
+			cout << type_g << " " << id_g << "ÊÇ¾Ö²¿±äÁ¿" << endl;
+			/*ÕâÊ±¶ÔÓ¦µÄÇé¿öÊÇ£ºÒªÌîĞ´char c
+			  int f(int m,int n){
+				  char c = 'a';
+			  }
+			 ´ËÊ±µÄÈ«¾ÖÖ¸ÕëÇé¿ö£º
+			  synbollistToFunc_g ÓĞÖµ£¨¼´Ã»ÓĞÑ¹Èëµ½synbollist_main_g£©
+			  ÆäËûËùÓĞÈ«¾ÖÖ¸ÕëÎª¿Õ
+			*/
+
+			//Ê×ÏÈ²éÖØ
+			checkSynbollistToFunc(synbollistToFunc_g->func, id_g);	//ÊÇ·ñÖØ¶¨Òå
+
+			if (mainSheet_g == NULL)
+			{
+				mainSheet_g = new MainSheet;
+			}
+			else
+			{
+				showErrowWhenCreateASheet("MainSheet");
+			}
+			mainSheet_g->content = id_g;//ÌîÃû×Ö
+			mainSheet_g->category = "v";//ÖÖÀàÊÇ±äÁ¿
+			mainSheet_g->flag = 1;
+
+			writeTypeSheet(type_g);
+			mainSheet_g->type = typeSheet_g;
+			typeSheet_g = NULL;
+
+			writeLevelAndOffsetAndValue(((FuncSheet*)(synbollistToFunc_g->synbollist.at(0)->addr))->level, offset_g);//
+			if (type_g == "int" || type_g == "float")
+			{
+				offset_g += 4;
+			}
+			else if (type_g == "char")
+			{
+				offset_g += 1;
+			}
+			else if (type_g == "double")
+			{
+				offset_g += 8;
+			}
+			else
+			{
+				cout << "³öÏÖÎ´ÖªÀàĞÍ" << type_g << ",Æä³¤¶È°´ÕÕ2¸ö×Ö½Ú¼ÆËã" << endl;
+				offset_g += 2;
+			}
+			//ÖÁ´ËÒ»¸öLevelAndOffset±íÌîÍê
+			mainSheet_g->addr = levelAndOffsetAndValue_g;
+			levelAndOffsetAndValue_g = NULL;
+			synbollistToFunc_g->synbollist.push_back(mainSheet_g);
+			mainSheet_g = NULL;
+		}
+		else
+		{//ÉùÃ÷µÄÊÇÈ«¾Ö±äÁ¿
+			cout << type_g << " " << id_g << "ÊÇÈ«¾Ö±äÁ¿" << endl;
+			/*ÕâÊ±¶ÔÓ¦µÄÇé¿öÊÇ£ºÒªÌîĞ´char c
+			  char c = 'a';
+			  int f(int m,int n){
+				  char b = 'a';
+			  }
+			 ´ËÊ±µÄÈ«¾ÖÖ¸ÕëÇé¿ö£º
+			  È«¾ÖÖ¸Õë¾ùÎª¿Õ
+			*/
+
+			//Ê×ÏÈ²éÖØ
+			checkGlobal(id_g);
+
+			if (mainSheet_g == NULL)
+			{
+				mainSheet_g = new MainSheet;
+			}
+			else
+			{
+				showErrowWhenCreateASheet("MainSheet");
+			}
+			mainSheet_g->content = id_g;
+			mainSheet_g->category = "v";
+			mainSheet_g->flag = 1;
+
+			writeTypeSheet(type_g);
+
+			mainSheet_g->type = typeSheet_g;
+			typeSheet_g = NULL;
+
+			writeLevelAndOffsetAndValue(0, global_offset_g);
+
+			mainSheet_g->addr = levelAndOffsetAndValue_g;
+			levelAndOffsetAndValue_g = NULL;
+			globalsynbollistToFunc_g->synbollist.push_back(mainSheet_g);
+			mainSheet_g = NULL;
+			if (type_g == "int" || type_g == "float")
+			{
+				global_offset_g += 4;
+			}
+			else if (type_g == "char")
+			{
+				global_offset_g += 1;
+			}
+			else if (type_g == "double")
+			{
+				global_offset_g += 8;
+			}
+			else
+			{
+				cout << "³öÏÖÎ´ÖªÀàĞÍ" << type_g << ",Æä³¤¶È°´ÕÕ2¸ö×Ö½Ú¼ÆËã" << endl;
+				global_offset_g += 2;
+			}
+		}
+		/*ÓïÒå¶¯×÷½áÊø*/
+		token_g = scan.next_Token();
+		if (ExpressionStatement() == 1)
+		{
+			ASSI();//¸³ÖµËÄÔªÊ½
+			return 1;
+		}
+		else
+		{
+			Error(token_g.row, token_g.content, "ÉùÃ÷Óï¾ä²»ÕıÈ·");
+		}
+	}
+	else if (token_g.content == "(")
+	{//º¯Êı¶¨Òå   int f (
+
+		if (id_g == "main")
+		{//Ö÷º¯Êı
+			func_name = "main";
+			MAIN();
+		}
+		else
+		{
+			token in;//ÆÕÍ¨º¯Êı¶¨Òå
+			in = { id_qt,2,false };
+			PUSHSEM(in);
+			func_name = id_qt;
+			FUNC();
+		}
+		/*ÓïÒå¶¯×÷²¿·Ö¿ªÊ¼*/
+		if (synbollistToFunc_g == NULL)
+		{
+			synbollistToFunc_g = new SynbollistToFunc;//´´½¨Ò»¸öÖ¸ÏòSynbollistToFunc¶ÔÏóµÄÖ¸Õë
+		}
+		else
+		{
+			showErrowWhenCreateASheet("synbollistToFunc");
+		}
+		synbollistToFunc_g->func = id_g;//ÌîÕâ¸ö¶ÔÏóµÄfuncÓò
+
+		checkSynbollist_main(id_g);//²éÖØ£¬Èç¹ûÖØ¶¨ÒåÁË»á½áÊø³ÌĞò
+
+		if (mainSheet_g == NULL)
+		{
+			mainSheet_g = new MainSheet;//´´½¨Ò»¸öÖ¸ÏòMainSheet¶ÔÏóµÄÖ¸Õë
+		}
+		else
+		{
+			showErrowWhenCreateASheet("MainSheet");
+		}
+		mainSheet_g->content = id_g;						//Ìî±êÊ¶·ûµÄÃû×Ö
+		mainSheet_g->category = "f";						//Ìî±êÊ¶·ûµÄÖÖÀà
+		mainSheet_g->flag = 0;								//Ìî±êÊ¶·ûµÄ±êÖ¾
+
+		writeTypeSheet(type_g);//Í¨¹ıtypeSheet_gĞÂ½¨Ò»¸öÀàĞÍ±í
+
+		mainSheet_g->type = typeSheet_g;
+		typeSheet_g = NULL;
+
+		if (funcSheet_g == NULL)
+		{
+			funcSheet_g = new FuncSheet;//ĞÂ½¨Ò»¸öº¯Êı±í
+			if (type_g == "int")
+			{
+				funcSheet_g->value = "1";
+			}
+			else if (type_g == "float")
+			{
+				funcSheet_g->value = "1.0";
+			}
+			else if (type_g == "char")
+			{
+				funcSheet_g->value = "a";
+			}
+		}
+		else
+		{
+			showErrowWhenCreateASheet("FuncSheet");
+		}
+		funcSheet_g->level = 1;//Ä¿Ç°ÉèÖÃlevelÎª1 
+		if (paras_g == NULL)
+		{
+			paras_g = new vector<ParaSheet*>; //´´½¨Ò»¸öÖ¸ÏòĞÎ²Î±ívectorµÄÖ¸Õë
+		}
+		else
+		{
+			showErrowWhenCreateASheet("paras_g");
+		}
+		fnum_g = 0;	//ÉèÖÃĞÎ²Î¸öÊıÎª0
+		offset_g = 0;//ÉèÖÃoffsetÎª0
+		/*ÓïÒå¶¯×÷²¿·Ö½áÊø
+		×Ü½á£º
+			Ä¿Ç°
+				synbollistToFunc_g»¹Ã»ÓĞ½øÈë×Üvector
+				mainSheet_g»¹ÓĞº¯Êı±íÃ»ÌîĞ´
+				funcSheet_g»¹ÓĞĞÎ²Î¸öÊı£¬²ÎÊı±í£¬Èë¿ÚµØÖ·Ã»Ğ´
+			½ÓÏÂÀ´Òª½øÈëµ½ paraters
+		*/
+
+		/*¼ÇÂ¼º¯ÊıÃû³Æ*/
+		func_name = id_g;
+		/*¼ÇÂ¼º¯ÊıÃû³Æ*/
+
+		token_g = scan.next_Token();
+		if (Paraters() == 1) {
+			if (token_g.content == ")") {		//º¯ÊıĞÎ²Î±í½áÊø
+
+				/*ÓïÒå¶¯×÷¿ªÊ¼*/
+				funcSheet_g->para = paras_g;	//½«²ÎÊı±íÌîĞ´µ½º¯Êı±í
+				paras_g = NULL;
+				funcSheet_g->fnum = fnum_g;		//½«²ÎÊı¸öÊıĞ´µ½º¯Êı±í
+
+				mainSheet_g->addr = funcSheet_g; //½«º¯Êı±íÌîĞ´µ½MainSheet_g
+				funcSheet_g = NULL;
+				synbollistToFunc_g->synbollist.push_back(mainSheet_g);  //½«MainSheet_gÑ¹Èëµ½synbollistToFunc_g->synbollist
+				mainSheet_g = NULL;
+
+				//½ÓÏÂÀ´½«tempMainSheetpointersÖĞµÄÖ¸ÕëÑ¹Èëµ½synbollistToFunc_g->synbollist
+				while (!tempMainSheetpointers.empty()) {
+					synbollistToFunc_g->synbollist.push_back(tempMainSheetpointers.front());
+					tempMainSheetpointers.pop();
+				}
+				/*ÓïÒå¶¯×÷½áÊø
+				×Ü½á£º
+					Ä¿Ç°£¬º¯Êı±êÊ¶·ûÒÑ¾­ÌîĞ´
+						  mianSheet_gÎª¿Õ
+						  synbollistToFunc_g»¹Ã»ÓĞÑ¹Èë×Üvector
+				½ÓÏÂÀ´£º
+					Òª½øÈëº¯ÊıÌå
+				*/
+				token_g = scan.next_Token();
+				if (Block() == 1) {
+					return 1;
+				}
+				else {
+					Error(token_g.row, token_g.content, "º¯ÊıÉùÃ÷²»ÕıÈ·");
+				}
+			}
+			else {
+				Error(token_g.row, token_g.content, "º¯ÊıÉùÃ÷²»ÕıÈ·");
+			}
+		}
+		else {
+			Error(token_g.row, token_g.content, "º¯ÊıÉùÃ÷²»ÕıÈ·");
+		}
+	}
+	else if (token_g.content == ";")
+	{// Èç¹ûÍÆµ¼µ½ÁËÕâÀï,ËµÃ÷ÊÇÒ»¸öµ¥´¿µÄÉùÃ÷Óï¾ä.Èç:int a;
+
+		/*ÓïÒå¶¯×÷¿ªÊ¼£¬ÕâÀïÊÇÌî·ûºÅ±íµÄÊ±»ú*/
+		if (synbollistToFunc_g != NULL) {													//ËµÃ÷ÉùÃ÷µÄÊÇ¾Ö²¿±äÁ¿
+			cout << type_g << " " << id_g << "ÊÇ¾Ö²¿±äÁ¿" << endl;
+			/*ÕâÊ±¶ÔÓ¦µÄÇé¿öÊÇ£ºÒªÌîĞ´char c
+			  int f(int m,int n){
+				  char c = 'a';
+			  }
+			 ´ËÊ±µÄÈ«¾ÖÖ¸ÕëÇé¿ö£º
+			  synbollistToFunc_g ÓĞÖµ£¨¼´Ã»ÓĞÑ¹Èëµ½synbollist_main_g£©
+			  ÆäËûËùÓĞÈ«¾ÖÖ¸ÕëÎª¿Õ
+			*/
+
+			//Ê×ÏÈ²éÖØ
+			checkSynbollistToFunc(synbollistToFunc_g->func, id_g);	//ÊÇ·ñÖØ¶¨Òå
+
+			if (mainSheet_g == NULL) {
+				mainSheet_g = new MainSheet;
+			}
+			else {
+				showErrowWhenCreateASheet("MainSheet");
+			}
+			mainSheet_g->content = id_g;		//ÌîÃû×Ö
+			mainSheet_g->category = "v";		//ÖÖÀàÊÇ±äÁ¿
+			mainSheet_g->flag = 1;
+
+			writeTypeSheet(type_g);
+			mainSheet_g->type = typeSheet_g;
+			typeSheet_g = NULL;
+
+			writeLevelAndOffsetAndValue(((FuncSheet*)(synbollistToFunc_g->synbollist.at(0)->addr))->level, offset_g);//
+			if (type_g == "int" || type_g == "float")
+			{
+				offset_g += 4;
+			}
+			else if (type_g == "char")
+			{
+				offset_g += 1;
+			}
+			else if (type_g == "double")
+			{
+				offset_g += 8;
+			}
+			else
+			{
+				cout << "³öÏÖÎ´ÖªÀàĞÍ" << type_g << ",Æä³¤¶È°´ÕÕ2¸ö×Ö½Ú¼ÆËã" << endl;
+				offset_g += 2;
+			}
+			//ÖÁ´ËÒ»¸öLevelAndOffset±íÌîÍê
+			mainSheet_g->addr = levelAndOffsetAndValue_g;
+			levelAndOffsetAndValue_g = NULL;
+			synbollistToFunc_g->synbollist.push_back(mainSheet_g);
+			mainSheet_g = NULL;
+		}
+		else
+		{//ÉùÃ÷µÄÊÇÈ«¾Ö±äÁ¿
+			cout << type_g << " " << id_g << "ÊÇÈ«¾Ö±äÁ¿" << endl;
+			/*ÕâÊ±¶ÔÓ¦µÄÇé¿öÊÇ£ºÒªÌîĞ´char c
+			  char c = 'a';
+			  int f(int m,int n){
+				  char b = 'a';
+			  }
+			 ´ËÊ±µÄÈ«¾ÖÖ¸ÕëÇé¿ö£º
+			  È«¾ÖÖ¸Õë¾ùÎª¿Õ
+			*/
+
+			//Ê×ÏÈ²éÖØ
+			checkGlobal(id_g);
+
+			if (mainSheet_g == NULL)
+			{
+				mainSheet_g = new MainSheet;
+			}
+			else
+			{
+				showErrowWhenCreateASheet("MainSheet");
+			}
+			mainSheet_g->content = id_g;
+			mainSheet_g->category = "v";
+			mainSheet_g->flag = 1;
+
+			writeTypeSheet(type_g);
+
+			mainSheet_g->type = typeSheet_g;
+			typeSheet_g = NULL;
+
+			writeLevelAndOffsetAndValue(0, global_offset_g);
+
+			mainSheet_g->addr = levelAndOffsetAndValue_g;
+			levelAndOffsetAndValue_g = NULL;
+			globalsynbollistToFunc_g->synbollist.push_back(mainSheet_g);
+			mainSheet_g = NULL;
+			if (type_g == "int" || type_g == "float")
+			{
+				global_offset_g += 4;
+			}
+			else if (type_g == "char")
+			{
+				global_offset_g += 1;
+			}
+			else if (type_g == "double")
+			{
+				global_offset_g += 8;
+			}
+			else
+			{
+				cout << "³öÏÖÎ´ÖªÀàĞÍ" << type_g << ",Æä³¤¶È°´ÕÕ2¸ö×Ö½Ú¼ÆËã" << endl;
+				global_offset_g += 2;
+			}
+		}
+		/*ÓïÒå¶¯×÷½áÊø*/
+		token_g = scan.next_Token();
+		return 1;
+	}
+	else {
+		return 0;
+	}
 }
 
-int Function_Declaration()
-{//å‡½æ•°å£°æ˜
-
+int EqualStringOrNumOrNull()
+{//ÉùÃ÷Êı×éºó³õÊ¼»¯or²»³õÊ¼»¯
+	if (token_g.content == "=")
+	{
+		token_g = scan.next_Token();
+		if (StringOrNum() == 1)
+		{
+			return 1;
+		}
+		else
+		{
+			Error(token_g.row, token_g.content, "ÔÚÓ¦¸ÃÊÇ×Ö·û´®»òÊı×éµÄµØ·½²»ÕıÈ·");
+		}
+	}
+	else {
+		return 1;
+	}
 }
 
-int Declaration()
+int StringOrNum()
+{//Êı×é³õÊ¼»¯
+	if (token_g.content == "{")
+	{
+		token_g = scan.next_Token();
+		if (token_g.type == 'n' || token_g.type == 'f')
+		{//ÕûĞÍ»ò¸¡µãĞÍ³£Êı
+			if (token_g.type == 'n')
+			{//ÕûĞÍ
+				type_g = "int";
+			}
+			else
+			{
+				type_g = "float";
+			}
+			if (synbollistToFunc_g != NULL)
+			{//º¯Êı¶¨Òå
+				if (!checkSynbollistToFuncNum(token_g.content))
+				{
+					if (mainSheet_g == NULL)
+					{
+						mainSheet_g = new MainSheet;
+					}
+					else
+					{
+						showErrowWhenCreateASheet("MainSheet");
+					}
+					if (type_g == "int")
+					{
+						mainSheet_g->content = to_string(stringToNum<int>(token_g.content));
+					}
+					else
+					{
+						mainSheet_g->content = token_g.content;		//ÌîÃû×Ö
+					}
+					mainSheet_g->category = "v";		//ÖÖÀàÊÇ±äÁ¿
+					mainSheet_g->flag = 1;
+
+					writeTypeSheet(type_g);
+					mainSheet_g->type = typeSheet_g;
+					typeSheet_g = NULL;
+
+					writeLevelAndOffsetAndValue(((FuncSheet*)(synbollistToFunc_g->synbollist.at(0)->addr))->level, offset_g);
+					levelAndOffsetAndValue_g->value = token_g.content;//Ìî»î¶¯¼ÇÂ¼ÀïµÄÖµ
+					mainSheet_g->addr = levelAndOffsetAndValue_g;
+					levelAndOffsetAndValue_g = NULL;
+					synbollistToFunc_g->synbollist.push_back(mainSheet_g);
+					mainSheet_g = NULL;
+				}
+			}
+			else
+			{//È«¾Ö
+				if (!checkGlobalNum(token_g.content))
+				{
+					if (mainSheet_g == NULL)
+					{
+						mainSheet_g = new MainSheet;
+					}
+					else
+					{
+						showErrowWhenCreateASheet("MainSheet");
+					}
+					if (type_g == "int")
+					{
+						mainSheet_g->content = to_string(stringToNum<int>(token_g.content));
+					}
+					else
+					{
+						mainSheet_g->content = token_g.content;		//ÌîÃû×Ö
+					}
+					mainSheet_g->category = "v";
+					mainSheet_g->flag = 1;
+
+					writeTypeSheet(type_g);
+
+					mainSheet_g->type = typeSheet_g;
+					typeSheet_g = NULL;
+
+					writeLevelAndOffsetAndValue(0, global_offset_g);
+					levelAndOffsetAndValue_g->value = token_g.content;
+					mainSheet_g->addr = levelAndOffsetAndValue_g;
+					levelAndOffsetAndValue_g = NULL;
+					globalsynbollistToFunc_g->synbollist.push_back(mainSheet_g);
+					mainSheet_g = NULL;
+				}
+			}
+
+			/*Êı×éÉú³ÉËÄÔªÊ½
+			token in;
+			in = { id_qt + "[" + to_string(arr_num_qt++) + "]",2,false };
+			PUSHSEM(in);
+			in = { token_g.content,1,false };
+			PUSHSEM(in);
+			ASSI();
+			Êı×éÉú³ÉËÄÔªÊ½*/
+
+			token_g = scan.next_Token();
+			while (token_g.content == ",")
+			{
+				token_g = scan.next_Token();
+				if (token_g.type == 'n' || token_g.type == 'f')
+				{
+					if (token_g.type == 'n')
+					{
+						type_g = "int";
+					}
+					else
+					{
+						type_g = "float";
+					}
+					if (synbollistToFunc_g != NULL)
+					{
+						if (!checkSynbollistToFuncNum(token_g.content))
+						{
+							if (mainSheet_g == NULL)
+							{
+								mainSheet_g = new MainSheet;
+							}
+							else
+							{
+								showErrowWhenCreateASheet("MainSheet");
+							}
+							if (type_g == "int")
+							{
+								mainSheet_g->content = to_string(stringToNum<int>(token_g.content));
+							}
+							else
+							{
+								mainSheet_g->content = token_g.content;//ÌîÃû×Ö
+							}
+							mainSheet_g->category = "v";//ÖÖÀàÊÇ±äÁ¿
+							mainSheet_g->flag = 1;
+
+							writeTypeSheet(type_g);
+							mainSheet_g->type = typeSheet_g;
+							typeSheet_g = NULL;
+
+							writeLevelAndOffsetAndValue(((FuncSheet*)(synbollistToFunc_g->synbollist.at(0)->addr))->level, offset_g);//
+							levelAndOffsetAndValue_g->value = token_g.content;
+							mainSheet_g->addr = levelAndOffsetAndValue_g;
+							levelAndOffsetAndValue_g = NULL;
+							synbollistToFunc_g->synbollist.push_back(mainSheet_g);
+							mainSheet_g = NULL;
+						}
+					}
+					else {
+						if (!checkGlobalNum(token_g.content)) {
+							if (mainSheet_g == NULL) {
+								mainSheet_g = new MainSheet;
+							}
+							else {
+								showErrowWhenCreateASheet("MainSheet");
+							}
+							if (type_g == "int") {
+								mainSheet_g->content = to_string(stringToNum<int>(token_g.content));
+							}
+							else {
+								mainSheet_g->content = token_g.content;		//ÌîÃû×Ö
+							}
+							mainSheet_g->category = "v";
+							mainSheet_g->flag = 1;
+
+							writeTypeSheet(type_g);
+
+							mainSheet_g->type = typeSheet_g;
+							typeSheet_g = NULL;
+
+							writeLevelAndOffsetAndValue(0, global_offset_g);
+							levelAndOffsetAndValue_g->value = token_g.content;
+							mainSheet_g->addr = levelAndOffsetAndValue_g;
+							levelAndOffsetAndValue_g = NULL;
+							globalsynbollistToFunc_g->synbollist.push_back(mainSheet_g);
+							mainSheet_g = NULL;
+						}
+					}
+
+
+					/*Êı×éÉú³ÉËÄÔªÊ½
+					token in;
+					in = { id_qt + "[" + to_string(arr_num_qt++) + "]",2 ,false };
+					PUSHSEM(in);
+					in = { token_g.content,1 ,false };
+					PUSHSEM(in);
+					ASSI();
+					/*Êı×éÉú³ÉËÄÔªÊ½*/
+
+					token_g = scan.next_Token();
+				}
+				else
+				{
+					Error(token_g.row, token_g.content, "±äÁ¿»òÊı×é¶¨Òå²»ÕıÈ·");
+				}
+			}
+			if (token_g.content == "}")
+			{
+				arr_num_qt = 0;//Êı×éÎ»ÖÃ¹éÁã
+				token_g = lexer_g.createAToken();
+				return 1;
+			}
+			else
+			{
+				Error(token_g.row, token_g.content, "±äÁ¿»òÊı×é¶¨Òå²»ÕıÈ·");
+			}
+		}
+		else
+		{
+			Error(token_g.row, token_g.content, "±äÁ¿»òÊı×é¶¨Òå²»ÕıÈ·");
+		}
+	}
+	/*else if (token_g.type == 's')
+	{//×Ö·û´®
+		int arr_length = token_g.content.length();
+		for (int arr_i = 1; arr_i < arr_length - 1; arr_i++)
+		{
+			token in;
+			in = { id_qt + "[" + to_string(arr_num_qt++) + "]", 2 ,false };
+			PUSHSEM(in);
+			in = { token_g.content.substr(arr_i, 1) ,3 ,false };
+			PUSHSEM(in);
+			ASSI();
+		}
+		token_g = scan.next_Token();
+		arr_num_qt = 0;//Êı×éÎ»ÖÃ¹éÁã
+		return 1;
+	}*/
+	else
+	 {
+		return 0;
+	}
+}
+
+
+int Statement()
 {
-	if (Const_Declaration() == 1)
+	if (token_g.content == "printf")
+	{	// statement --> printf'('expression')'';' ¿ªÊ¼
+		token_g = scan.next_Token();						//¶ÁÈëÏÂÒ»¸ötoken
+		if (token_g.content == "(")
+		{
+			token_g = scan.next_Token();					//¶ÁÈëÏÂÒ»¸ötoken
+			if (Expression() == 1)
+			{
+				if (token_g.content == ")")
+				{
+					token_g = scan.next_Token();			//¶ÁÈëÏÂÒ»¸ötoken
+					if (token_g.content == ";")
+					{
+						token_g = scan.next_Token();		//¶ÁÈëÏÂÒ»¸ötoken
+						return 1;
+					}
+					else
+						Error(token_g.row, token_g.content, "ÔÚÓ¦¸Ã¶ÁÈë';'µÄµØ·½³ö´í");
+				}
+				else
+					Error(token_g.row, token_g.content, "ÔÚÓ¦¸Ã¶ÁÈë')'µÄµØ·½³ö´í");
+			}
+			else
+				Error(token_g.row, token_g.content, "printfÓï¾ä±í´ïÊ½³ö´í");
+		}
+		else
+			Error(token_g.row, token_g.content, "ÔÚÓ¦¸Ã¶ÁÈë'('µÄµØ·½³ö´í");//ĞĞ£¬ ÄÚÈİ£¬´íÎó
+	}		// statement --> printf'('expression')'';'½áÊø
+	else if (Block() == 1)
+	{	// ¸´ºÏÓï¾ästatement --> block
 		return 1;
-	else if (Array_Declaration() == 1)
+	}
+	else if (token_g.content == "if")
+	{	// statement --> IF '(' experssion ')' statement ElSE statement
+		token_g = scan.next_Token();
+		if (token_g.content == "(")
+		{
+			token_g = scan.next_Token();
+			if (Expression() == 1)
+			{
+				if (token_g.content == ")")
+				{
+					IF();/*ifÓï¾äËÄÔªÊ½Éú³É£ºÔËËã·ûif   µÚÒ»ÔËËã¶ÔÏóÎªÕ»¶¥ÔªËØSEM[sem],µÚ¶şÔËËã¶ÔÏóºÍ½á¹ûÎª¿Õ
+		 Õ»¶¥ÔªËØµ¯Õ»*/
+					token_g = scan.next_Token();
+					if (Statement() == 1)
+					{
+						if (token_g.content == "else")
+						{
+							EL();/*elseÓï¾äËÄÔªÊ½Éú³É£ºÔËËã·ûel ÆäËûÎª¿Õ SEMÎŞ²Ù×÷*/
+							token_g = scan.next_Token();
+							if (Statement() == 1)
+							{
+								IE();/*½áÊøËÄÔªÊ½£ºÔËËã·ûie ÆäËûÎª¿Õ SEMÎŞ²Ù×÷*/
+								return 1;
+							}
+							else
+								Error(token_g.row, token_g.content, "elseÌå³ö´í");
+						}
+						else
+							Error(token_g.row, token_g.content, "if Óï¾äÃ»ÓĞelse");
+					}
+					else
+						Error(token_g.row, token_g.content, "ifÌå³ö´í");
+				}
+				else
+					Error(token_g.row, token_g.content, "ÔÚÓ¦¸Ã¶ÁÈë')'µÄµØ·½³ö´í");
+			}
+			else
+				Error(token_g.row, token_g.content, "ifÓï¾ä±í´ïÊ½³ö´í");
+		}
+		else
+			Error(token_g.row, token_g.content, "ÔÚÓ¦¸Ã¶ÁÈë'('µÄµØ·½³ö´í");
+	}  // statement --> IF '(' experssion ')' statement ElSE statement ½áÊø
+	else if (token_g.content == "while")
+	{  // statement --> WHILE '(' expression ')' statement
+		WH();/*whileÑ­»·Í·º¯Êı£ºwh ÆäËûÎª¿Õ SEMÎŞ²Ù×÷*/
+		token_g = scan.next_Token();
+		if (token_g.content == "(")
+		{
+			scan.next_Token();
+			if (Expression() == 1)
+			{
+				if (token_g.content == ")")
+				{
+					DO();/*doº¯Êı£ºdo µÚÒ»²Ù×÷ÊıÎªÕ»¶¥ÔªËØ µÚ¶şÎª¿Õ ½á¹ûÎª¿Õ
+			 Õ»¶¥ÔªËØµ¯³ö*/
+					token_g = scan.next_Token();
+					if (Statement() == 1)
+					{
+						WE();/*Ñ­»·Î²£ºwe ÆäËû¿Õ SEMÎŞ²Ù×÷*/
+						return 1;
+					}
+					else
+						Error(token_g.row, token_g.content, "whileÌå³ö´í");
+				}
+				else
+					Error(token_g.row, token_g.content, "ÔÚÓ¦¸Ã¶ÁÈë')'µÄµØ·½³ö´í");
+			}
+			else
+				Error(token_g.row, token_g.content, "whileÓï¾ä±í´ïÊ½³ö´í");
+		}
+		else
+			Error(token_g.row, token_g.content, "ÔÚÓ¦¸Ã¶ÁÈë'('µÄµØ·½³ö´í");
+	}  // statement --> WHILE '(' expression ')' statement ½áÊø
+	/*else if (token_g.content == "for")
+	 {//FOR '(' varDeclaration @ expression ';' expression';' expression ')' statement
+	//forÓï¾äÏà¹ØËÄÔªÊ½Éú³É£ºFOR FORDO JUMPD0 DOS DOE FORE
+		token_g = scan.next_Token();
+		if (token_g.content == "(") {
+			token_g = lexer_g.createAToken();
+			if (ExpressionStatement() == 1) {
+				FOR();//forÑ­»·¿ªÊ¼±ê¼Ç
+				if (Expression() == 1) {
+					FORDO();//forÑ­»·£¬Ñ­»·Ìõ¼şÅĞ¶Ï
+					if (token_g.content == ";") {
+						token_g = lexer_g.createAToken();
+						if (Expression() == 1) {
+							JUMPDO();//Ìø×ª»ØÑ­»·Ìõ¼şÅĞ¶Ï´¦
+							if (token_g.content == ")") {
+								token_g = lexer_g.createAToken();
+								DOS();
+								if (Statement() == 1) {
+									DOE();//forÑ­»·Ö´ĞĞ¿é½áÎ²
+									FORE();//forÑ­»·½áÊøÎ»ÖÃ
+									return 1;
+								}
+								else {
+									Error(token_g.row, token_g.content, "forÓï¾äÌå´íÎó");
+								}
+							}
+							else {
+								Error(token_g.row, token_g.content, "ÔÚÓ¦¸Ã¶ÁÈë')'µÄµØ·½³ö´í");
+							}
+						}
+						else {
+							Error(token_g.row, token_g.content, "forÓï¾ä³ö´í");
+						}
+					}
+					else {
+						Error(token_g.row, token_g.content, "ÔÚÓ¦¸Ã¶ÁÈë';'µÄµØ·½³ö´í");
+					}
+				}
+				else {
+					Error(token_g.row, token_g.content, "forÓï¾ä³ö´í");
+				}
+			}
+			else {
+				Error(token_g.row, token_g.content, "forÓï¾äµÄµÚÒ»¸ö·ÖºÅÇ°È±ÉÙ±í´ïÊ½»ò±äÁ¿ÉùÃ÷");
+			}
+		}
+		else {
+			Error(token_g.row, token_g.content, "ÔÚÓ¦¸Ã¶ÁÈë'('µÄµØ·½³ö´í");
+		}
+	}*/
+	else if (ExpressionStatement() == 1)
+	 {
 		return 1;
-	else if (Function_Declaration() == 1)
-		return 1;
+	}
+	else if (token_g.content == "return")
+	 {
+		token_g = scan.next_Token();
+		if (ExpressionStatement() == 1) 
+		{
+			RET();
+		}
+		else
+			Error(token_g.row, token_g.content, "returnÓï¾ä´íÎó");
+	}
+	return 0;
+}
+
+int Block()
+{//×÷ÓÃÓò£ºÒ»¸ö»ò¶à¸ö
+	if (token_g.content == "{")
+	{
+		token_g = scan.next_Token();
+		if (ZeroOrMoreDeclation() == 1)
+		{
+			if (token_g.content == "}")
+			{
+				/*ÓïÒå¶¯×÷¿ªÊ¼*/
+				if (synbollistToFunc_g != NULL) {
+					synbollistToFunc_g->offset_max = offset_g;			//ÅĞ¶ÏÊÇ·ñ½¨Á¢ÁËÒ»¸öSynbollistToFunc¶ÔÏó										 
+					synbollist_main_g.push_back(synbollistToFunc_g);     //Èç¹û½¨Á¢ÁË£¬½«synbollistToFunc_gÖ¸ÕëÑ¹Èë·ûºÅ×Ü±í
+					synbollistToFunc_g = NULL;								 //½«synbollistToFunc_gÉèÎª¿Õ
+				}
+				/*ÓïÒå¶¯×÷½áÊø
+				×Ü½á£º
+					Ä¿Ç°£¬synbollistToFunc_gÎª¿Õ
+				*/
+				token_g = scan.next_Token();
+				return 1;
+			}
+			else 
+			{
+				Error(token_g.row, token_g.content, "Ó¦¸ÃÊÇÓÒÀ¨ºÅµÄµØ·½³ö´í");
+			}
+		}
+		else
+		{
+			Error(token_g.row, token_g.content, "³ö´í");
+		}
+	}
+	else 
+	{
+		return 0;
+	}
+}
+
+int ExpressionStatement()
+{//ÎªÊı×é¸³Öµ
+	if (Expression() == 1)
+	{
+		if (token_g.content == ";")
+		{
+			token_g = scan.next_Token();
+			return 1;
+		}
+		else
+		{
+			Error(token_g.row, token_g.content, "È±ÉÙ·ÖºÅ");
+		}
+	}
 	else
 		return 0;
 }
 
-int Declaration_list_1()
+int Expression()
 {
-	if (Declaration() == 1)
+	if (Assignment() == 1)
 	{
-		if (Declaration_list_1() == 1)
-				return 1;
-		else
-			Error(token.row,token.content,"é”™è¯¯ï¼");
-	}	
-	else//ç©º
-		return 1;
-}
-
-int Declaration_list()
-{
-	if (Declaration() == 1)
-	{
-		if (Declaration_list_1() == 1)
+		if (Assignment_1() == 1)
 			return 1;
 		else
-			Error(token.row,token.content,"é”™è¯¯ï¼");
+			Error(token_g.row, token_g.content, "¸³ÖµÓï¾ä´íÎó£¡");
 	}
 	else
 		return 0;
 }
 
-//ç®—æœ¯è¡¨è¾¾å¼
 
-int Factor()
-{//å› å­éƒ¨åˆ†å°šæœªå®Œå–„ï¼ˆæ¶‰åŠæ•°ç»„ï¼‰
 
-}
-
-int MD_Expression_1()
+//¸³ÖµÓï¾ä
+int Assignment()
 {
-	if (token.content == '*')
+	if (Logical_Expression() == 1)
 	{
-		token == scan.next_Tkoen();
-		if (Factor() == 1)
-		{
-			GEQ("*");//å››å…ƒå¼ç”Ÿæˆå‡½æ•°
-			if (MD_Expression_1 == 1)
-				return 1;
-			else
-				Error(token.row, token.content, "ä¹˜æ³•è¡¨è¾¾å¼é”™è¯¯ï¼");
-		}
-		else
-			Error(token.row, token.content, "ä¹˜é™¤æ³•è¡¨è¾¾å¼é”™è¯¯ï¼");
-	}
-	if (token.content == '/')
-	{
-		token == scan.next_Tkoen();
-		if (Factor() == 1)
-		{
-			GEQ("/");//å››å…ƒå¼ç”Ÿæˆå‡½æ•°
-			if (MD_Expression_1 == 1)
-				return 1;
-			else
-				Error(token.row, token.content, "é™¤å‘æ³•è¡¨è¾¾å¼é”™è¯¯ï¼");
-		}
-		else
-			Error(token.row, token.content, "ä¹˜é™¤æ³•è¡¨è¾¾å¼é”™è¯¯ï¼");
-	}
-	else
-		return 1;
-}
-
-int MD_Expression()
-{
-	if (Factor() == 1)
-	{
-		if (MD_Expression_1() == 1)
+		if (Other_Logical() == 1)
 			return 1;
 		else
-			Error(token.row, token.content, "åŠ å‡æ³•è¡¨è¾¾å¼é”™è¯¯ï¼");
+			Error(token_g.row, token_g.content, "¸³ÖµÓï¾ä´íÎó£¡");
 	}
 	else
 		return 0;
 }
 
-int Arithmetic_Expression_1()
+int Assignment_1()
 {
-	if (token.content == '+')
+	if (token_g.content == "=")
 	{
-		token == scan.next_Tkoen();
-		if (MD_Expression() == 1)
+		token_g = scan.next_Token();
+		if (Assignment() == 1)
 		{
-			GEQ("+");//å››å…ƒå¼ç”Ÿæˆå‡½æ•°
-			if (Arithmetic_Expression_1 == 1)
-				return 1;
-			else
-				Error(token.row, token.content, "åŠ æ³•è¡¨è¾¾å¼é”™è¯¯ï¼");
-		}	
-		else
-			Error(token.row, token.content, "åŠ å‡æ³•è¡¨è¾¾å¼é”™è¯¯ï¼");
-	}
-	if (token.content == '-')
-	{
-		token == scan.next_Tkoen();
-		if (MD_Expression() == 1)
-		{
-			GEQ("-");//å››å…ƒå¼ç”Ÿæˆå‡½æ•°
-			if (Arithmetic_Expression_1 == 1)
-				return 1;
-			else
-				Error(token.row, token.content, "å‡æ³•è¡¨è¾¾å¼é”™è¯¯ï¼");
+			ASSI();//¸³ÖµËÄÔªÊ½²úÉúÊ½
+			return 1;
 		}
 		else
-			Error(token.row, token.content, "åŠ å‡æ³•è¡¨è¾¾å¼é”™è¯¯ï¼");
+			Error(token_g.row, token_g.content, "¸³ÖµÓï¾ä´íÎó£¡");
 	}
-	else//ç©º
+	else
 		return 1;
 }
 
-int Arithmetic_Expression()
+int Logical_Expression()
 {
-	if (MD_Expression() == 1)
+	if (Equality() == 1)
 	{
-		if (Arithmetic_Expression_1() == 1)
+		if (Equality_2() == 1)
 			return 1;
 		else
-			Error(token.row, token.content, "é”™è¯¯ï¼");
+			Error(token_g.row, token_g.content, "Âß¼­±í´ïÊ½´íÎó£¡");
 	}
 	else
 		return 0;
 }
 
-//é€»è¾‘è¡¨è¾¾å¼
-int Arithmetic_Expression_2()
+int Other_Logical()
 {
-	if (token.content == ">")
+	if (token_g.content == "&&")
 	{
-		token = scan.next_Token();
-		if (Equality() == 1)
+		token_g = scan.next_Token();
+		if (Logical_Expression() == 1)
 		{
-			GEQ(">");//å››å…ƒå¼äº§ç”Ÿå¼
-			return 1;
+			GEQ("&&");//ËÄÔªÊ½²úÉúÊ½
+			if (Other_Logical() == 1)
+				return 1;
 		}
 		else
-			Error(token.row, token.content, "é€»è¾‘æ¯”è¾ƒè¡¨è¾¾å¼é”™è¯¯ï¼");
+			Error(token_g.row, token_g.content, "Âß¼­±í´ïÊ½´íÎó£¡");
 	}
-	if (token.content == ">=")
+	if (token_g.content == "||")
 	{
-		token = scan.next_Token();
-		if (Equality() == 1)
+		token_g = scan.next_Token();
+		if (Logical_Expression() == 1)
 		{
-			GEQ(">=");//å››å…ƒå¼äº§ç”Ÿå¼
-			return 1;
+			GEQ("||");//ËÄÔªÊ½²úÉúÊ½
+			if (Other_Logical() == 1)
+				return 1;
 		}
 		else
-			Error(token.row, token.content, "é€»è¾‘æ¯”è¾ƒè¡¨è¾¾å¼é”™è¯¯ï¼");
-	}
-	if (token.content == "<")
-	{
-		token = scan.next_Token();
-		if (Equality() == 1)
-		{
-			GEQ("<");//å››å…ƒå¼äº§ç”Ÿå¼
-			return 1;
-		}
-		else
-			Error(token.row, token.content, "é€»è¾‘æ¯”è¾ƒè¡¨è¾¾å¼é”™è¯¯ï¼");
-	}
-	if (token.content == "<=")
-	{
-		token = scan.next_Token();
-		if (Equality() == 1)
-		{
-			GEQ("<=");//å››å…ƒå¼äº§ç”Ÿå¼
-			return 1;
-		}
-		else
-			Error(token.row, token.content, "é€»è¾‘æ¯”è¾ƒè¡¨è¾¾å¼é”™è¯¯ï¼");
+			Error(token_g.row, token_g.content, "Âß¼­±í´ïÊ½´íÎó£¡");
 	}
 	else
 		return 1;
@@ -347,7 +1311,7 @@ int Equality()
 		if (Arithmetic_Expression_2() == 1)
 			return 1;
 		else
-			Error(token.row, token.content, "é€»è¾‘è¡¨è¾¾å¼é”™è¯¯ï¼");
+			Error(token_g.row, token_g.content, "Âß¼­±í´ïÊ½´íÎó£¡");
 	}
 	else
 		return 0;
@@ -355,113 +1319,344 @@ int Equality()
 
 int Equality_2()
 {
-	if (token.content == "!=")
+	if (token_g.content == "!=")
 	{
-		token = scan.next_Token();
+		token_g = scan.next_Token();
 		if (Equality() == 1)
 		{
-			GEQ("!=");//å››å…ƒå¼äº§ç”Ÿå¼
+			GEQ("!=");//ËÄÔªÊ½²úÉúÊ½
 			return 1;
 		}
 		else
-			Error(token.row, token.content, "é€»è¾‘è¡¨è¾¾å¼é”™è¯¯ï¼");
+			Error(token_g.row, token_g.content, "Âß¼­±í´ïÊ½´íÎó£¡");
 	}
-	if (token.content == "==")
+	if (token_g.content == "==")
 	{
-		token = scan.next_Token();
+		token_g = scan.next_Token();
 		if (Equality() == 1)
 		{
-			GEQ("==");//å››å…ƒå¼äº§ç”Ÿå¼
+			GEQ("==");//ËÄÔªÊ½²úÉúÊ½
 			return 1;
 		}
 		else
-			Error(token.row, token.content, "é€»è¾‘è¡¨è¾¾å¼é”™è¯¯ï¼");
+			Error(token_g.row, token_g.content, "Âß¼­±í´ïÊ½´íÎó£¡");
 	}
 	else
 		return 1;
 }
-int Logical_Expression()
+int Arithmetic_Expression()
 {
-	if (Equality() == 1)
+	if (MD_Expression() == 1)
 	{
-		if (Equality_2() == 1)
+		if (Arithmetic_Expression_1() == 1)
 			return 1;
 		else
-			Error(token.row, token.content, "é€»è¾‘è¡¨è¾¾å¼é”™è¯¯ï¼");
+			Error(token_g.row, token_g.content, "´íÎó£¡");
 	}
 	else
 		return 0;
 }
 
-int Other_Logical()
+//Âß¼­±í´ïÊ½
+int Arithmetic_Expression_2()
 {
-	if (token.content == "&&")
+	if (token_g.content == ">")
 	{
-		token = scan.next_Token();
-		if (Logical_Expression() == 1)
+		token_g = scan.next_Token();
+		if (Equality() == 1)
 		{
-			GEQ("&&");//å››å…ƒå¼äº§ç”Ÿå¼
-			if (Other_Logical() == 1)
+			GEQ(">");//ËÄÔªÊ½²úÉúÊ½
+			return 1;
+		}
+		else
+			Error(token_g.row, token_g.content, "Âß¼­±È½Ï±í´ïÊ½´íÎó£¡");
+	}
+	if (token_g.content == ">=")
+	{
+		token_g = scan.next_Token();
+		if (Equality() == 1)
+		{
+			GEQ(">=");//ËÄÔªÊ½²úÉúÊ½
+			return 1;
+		}
+		else
+			Error(token_g.row, token_g.content, "Âß¼­±È½Ï±í´ïÊ½´íÎó£¡");
+	}
+	if (token_g.content == "<")
+	{
+		token_g = scan.next_Token();
+		if (Equality() == 1)
+		{
+			GEQ("<");//ËÄÔªÊ½²úÉúÊ½
+			return 1;
+		}
+		else
+			Error(token_g.row, token_g.content, "Âß¼­±È½Ï±í´ïÊ½´íÎó£¡");
+	}
+	if (token_g.content == "<=")
+	{
+		token_g = scan.next_Token();
+		if (Equality() == 1)
+		{
+			GEQ("<=");//ËÄÔªÊ½²úÉúÊ½
+			return 1;
+		}
+		else
+			Error(token_g.row, token_g.content, "Âß¼­±È½Ï±í´ïÊ½´íÎó£¡");
+	}
+	else
+		return 1;
+}
+
+int MD_Expression()
+{
+	if (Factor() == 1)
+	{
+		if (MD_Expression_1() == 1)
+			return 1;
+		else
+			Error(token_g.row, token_g.content, "¼Ó¼õ·¨±í´ïÊ½´íÎó£¡");
+	}
+	else
+		return 0;
+}
+
+int Arithmetic_Expression_1()
+{
+	if (token_g.content == '+')
+	{
+		token_g == scan.next_Tkoen();
+		if (MD_Expression() == 1)
+		{
+			GEQ("+");//ËÄÔªÊ½Éú³Éº¯Êı
+			if (Arithmetic_Expression_1 == 1)
 				return 1;
+			else
+				Error(token_g.row, token_g.content, "¼Ó·¨±í´ïÊ½´íÎó£¡");
 		}
 		else
-			Error(token.row, token.content, "é€»è¾‘è¡¨è¾¾å¼é”™è¯¯ï¼");
+			Error(token_g.row, token_g.content, "¼Ó¼õ·¨±í´ïÊ½´íÎó£¡");
 	}
-	if (token.content == "||")
+	if (token_g.content == '-')
 	{
-		token = scan.next_Token();
-		if (Logical_Expression() == 1)
+		token_g == scan.next_Tkoen();
+		if (MD_Expression() == 1)
 		{
-			GEQ("||");//å››å…ƒå¼äº§ç”Ÿå¼
-			if (Other_Logical() == 1)
+			GEQ("-");//ËÄÔªÊ½Éú³Éº¯Êı
+			if (Arithmetic_Expression_1 == 1)
 				return 1;
+			else
+				Error(token_g.row, token_g.content, "¼õ·¨±í´ïÊ½´íÎó£¡");
 		}
 		else
-			Error(token.row, token.content, "é€»è¾‘è¡¨è¾¾å¼é”™è¯¯ï¼");
+			Error(token_g.row, token_g.content, "¼Ó¼õ·¨±í´ïÊ½´íÎó£¡");
 	}
-	else
+	else//¿Õ
 		return 1;
 }
-//èµ‹å€¼è¯­å¥
-int Assignment()
-{
-	if (Logical_Expression() == 1)
-	{
-		if (Other_Logical() == 1)
-			return 1;
-		else
-			Error(token.row, token.content, "èµ‹å€¼è¯­å¥é”™è¯¯ï¼");
-	}
-	else
-		return 0;
-}
 
-int Assignment_1()
+
+int MD_Expression_1()
 {
-	if (token.content == "=")
+	if (token_g.content == '*')
 	{
-		token = scan.next_Token();
-		if (Assignment() == 1)
+		token_g == scan.next_Tkoen();
+		if (Factor() == 1)
 		{
-			ASSI();//èµ‹å€¼å››å…ƒå¼äº§ç”Ÿå¼
-			return 1;
+			GEQ("*");//ËÄÔªÊ½Éú³Éº¯Êı
+			if (MD_Expression_1 == 1)
+				return 1;
+			else
+				Error(token_g.row, token_g.content, "³Ë·¨±í´ïÊ½´íÎó£¡");
 		}
 		else
-			Error(token.row, token.content, "èµ‹å€¼è¯­å¥é”™è¯¯ï¼");
+			Error(token_g.row, token_g.content, "³Ë³ı·¨±í´ïÊ½´íÎó£¡");
+	}
+	if (token_g.content == '/')
+	{
+		token_g == scan.next_Tkoen();
+		if (Factor() == 1)
+		{
+			GEQ("/");//ËÄÔªÊ½Éú³Éº¯Êı
+			if (MD_Expression_1 == 1)
+				return 1;
+			else
+				Error(token_g.row, token_g.content, "³ı·¨±í´ïÊ½´íÎó£¡");
+		}
+		else
+			Error(token_g.row, token_g.content, "³Ë³ı·¨±í´ïÊ½´íÎó£¡");
 	}
 	else
 		return 1;
 }
 
-int Expression()
-{
-	if (Assiginment() == 1)
-	{
-		if (Assignment_1() == 1)
+//ËãÊõ±í´ïÊ½
+/*int Factor()
+{//Òò×Ó
+	if (token_g.content == "!") {
+		token_g = scan.next_Token();
+		if (Primary_2() == 1) {
+			NOT();
 			return 1;
-		else
-			Error(token.row, token.content, "èµ‹å€¼è¯­å¥é”™è¯¯ï¼");
+		}
+		else {
+			Error(token_g.row, token_g.content, "!±í´ïÊ½´íÎó");
+		}
 	}
+	if (token_g.content == "-") {
+		token_g = scan.next_Token();
+		if (Primary_2() == 1) {
+			Minus();
+			return 1;
+		}
+		else {
+			Error(token_g.row, token_g.content, "-±í´ïÊ½´íÎó");
+		}
+	}
+	else if (Primary_2() == 1)
+		return 1;
+	else
+		return 0;
+}*/
+
+int Factor()
+{//Òò×Ó£º±í´ïÊ½»ò±äÁ¿
+	if (token_g.content == "(")
+	{
+		token_g = scan.next_Token();
+		if (Expression() == 1)
+		{
+			if (token_g.content == ")")
+			{
+				token_g = scan.next_Token();
+				return 1;
+			}
+			else
+				Error(token_g.row, token_g.content, "È±ÉÙÓÒÀ¨ºÅ");
+		}
+		else
+			Error(token_g.row, token_g.content, "À¨ºÅ±í´ïÊ½´íÎó");
+	}
+	else if (Primary() == 1)
+		return 1;
 	else
 		return 0;
 }
+}int Primary()
+{//³õÊ¼»¯±äÁ¿£¬ĞèÒª²é±íÌî±í
+	if (token_g.type == 'n' || token_g.type == 'f')
+	{//ÕûĞÍ»ò×Ö·ûĞÍ³£Êı
+		if (token_g.type == 'n')
+		{
+			type_g = "int";
+		}
+		else
+		{
+			type_g = "float";
+		}
+		if (synbollistToFunc_g != NULL)
+		{//·ÇÈ«¾Ö
+			if (!checkSynbollistToFuncNum(token_g.content))
+			{
+				if (mainSheet_g == NULL)
+				{
+					mainSheet_g = new MainSheet;
+				}
+				else
+				{
+					showErrowWhenCreateASheet("MainSheet");
+				}
+				if (type_g == "int")
+				{
+					mainSheet_g->content = to_string(stringToNum<int>(token_g.content));
+				}
+				else {
+					mainSheet_g->content = token_g.content;//ÌîÃû×Ö
+				}
+				mainSheet_g->category = "v";//ÖÖÀàÊÇ±äÁ¿
+				mainSheet_g->flag = 1;
+
+				writeTypeSheet(type_g);
+				mainSheet_g->type = typeSheet_g;
+				typeSheet_g = NULL;
+
+				writeLevelAndOffsetAndValue(((FuncSheet*)(synbollistToFunc_g->synbollist.at(0)->addr))->level, offset_g);
+				levelAndOffsetAndValue_g->value = token_g.content;
+				mainSheet_g->addr = levelAndOffsetAndValue_g;
+				levelAndOffsetAndValue_g = NULL;
+				synbollistToFunc_g->synbollist.push_back(mainSheet_g);
+				mainSheet_g = NULL;
+			}
+		}
+		else 
+		{
+			if (!checkGlobalNum(token_g.content))
+			{
+				if (mainSheet_g == NULL)
+				{
+					mainSheet_g = new MainSheet;
+				}
+				else
+				{
+					showErrowWhenCreateASheet("MainSheet");
+				}
+				if (type_g == "int")
+				{
+					mainSheet_g->content = to_string(stringToNum<int>(token_g.content));
+				}
+				else {
+					mainSheet_g->content = token_g.content;
+				}
+				mainSheet_g->category = "v";
+				mainSheet_g->flag = 1;
+
+				writeTypeSheet(type_g);
+
+				mainSheet_g->type = typeSheet_g;
+				typeSheet_g = NULL;
+
+				writeLevelAndOffsetAndValue(0, global_offset_g);
+				levelAndOffsetAndValue_g->value = token_g.content;
+				mainSheet_g->addr = levelAndOffsetAndValue_g;
+				levelAndOffsetAndValue_g = NULL;
+				globalsynbollistToFunc_g->synbollist.push_back(mainSheet_g);
+				mainSheet_g = NULL;
+			}
+		}
+
+		/***************************************/
+		token in;
+		in = { token_g.content,1,false };
+		PUSHSEM(in);//¼ÓÈëÓïÒåÕ»
+		/***************************************/
+		token_g = scan.next_Token();
+		return 1;
+
+	}
+	else if (token_g.type == 'c')
+	{
+		/***************************************/
+		token in;
+		in = { token_g.content,1,false };
+		PUSHSEM(in);//¼ÓÈëÓïÒåÕ»
+		/***************************************/
+		token_g = scan.next_Token();
+		return 1;
+	}
+	else if (ID() == 1)
+	{
+		if (ArrFunc() == 1)
+		{
+			return 1;
+		}
+		else
+		{
+			Error(token_g.row, token_g.content, "²»ÕıÈ·");
+		}
+	}
+	else
+	{
+		return 0;
+	}
+}
+
