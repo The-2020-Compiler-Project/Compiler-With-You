@@ -1,105 +1,37 @@
-#include<vector>
-#include<string>
+#include "Óï·¨·ÖÎö.h"
+#include <algorithm>
 
-int rr = 1;//è®°å½•ä¸´æ—¶å˜é‡ä¸ªæ•°
+int rr = 1;//ÁÙÊ±±äÁ¿Éú³É
 int sem = 0;
-int func_num;
 
-string type_1;//æ“ä½œæ•°ç±»å‹
+string type_1;//²Ù×÷ÊıÀàĞÍ
 string type_2;
 
-string value_1; //æ“ä½œæ•°çš„å€¼
+string value_1; //²Ù×÷ÊıÖµ
 string value_2;
 
-//å­˜å…¥å››å…ƒå¼çš„ç›¸å…³é‡
+vector <token> L; //»îÔ¾ĞÅÏ¢
+vector <token> LL;//£¿£¿£¿£¿
+
 token left_n;
 token right_n;
 token res_n;
-token null_point;
-null_point.name = "";
-null_point.type = 0;
 vector<QT>qt;
-mystack<token> SEM;
 
+int func_num = 0;
+mystack<token>SEM;
 
-#include <sstream>
-//æ¨¡æ¿å‡½æ•°ï¼šå°†stringç±»å‹å˜é‡è½¬æ¢ä¸ºå¸¸ç”¨çš„æ•°å€¼ç±»å‹ï¼ˆå­—ç¬¦ä¸²çš„ç©ºæ ¼ä½œä¸ºåˆ†ç•Œç‚¹ï¼Œå®Œæˆå­—ç¬¦ä¸²ä¸­å„ç±»æˆåˆ†çš„æ‹†åˆ†ï¼‰
-template <class Type>
-Type stringToNum(const string& str)
-{
-	istringstream iss(str);
-	Type num;
-	iss >> num;
-	return num;//è¿”å›å¸¸æ•°
-}
-
-struct token 
-{
-	string name;
-	int type;// 1å¸¸é‡ï¼Œ2éä¸´æ—¶å˜é‡ï¼Œ3æ˜¯ä¸´æ—¶å˜é‡
-	bool active;//æ´»è·ƒä¿¡æ¯
-	token() { name = ""; type = 0; active = false; }
-	token(string namet, int typet, bool activet) { name = namet; type = typet; active = activet; }
-	void clear() { name = ""; type = 0; active = false; }
-};
-
-struct QT
-{
-	string Operat;//æ“ä½œç¬¦
-	token opA;
-	token opB;
-	token res;
-	int block;//åŸºæœ¬å—
-	QT() { Operat = ""; opA.clear(); opB.clear(); res.clear(); }
-	QT(string Operatt, token opAt, token opBt, token rest) { Operat = Operatt; opA = opAt; opB = opBt; res = rest; }
-	void clear() { Operat = ""; opA.clear(); opB.clear(); res.clear(); }
-};
-
-template<class T>
-class mystack
-{
-	int top;
-	T* mys;
-	int maxsize;
-public:
-	mystack() :top(-1), maxsize(111)
-	{
-		mys = new T[maxsize];
-		if (mys == NULL)
-		{
-			cerr << "åŠ¨æ€å­˜å‚¨åˆ†é…å¤±è´¥ï¼" << endl;
-			exit(1);
-		}
-	}
-	mystack(int size) :top(-1), maxsize(size)
-	{
-		mys = new T[maxsize];
-		if (mys == NULL)
-		{
-			cerr << "åŠ¨æ€å­˜å‚¨åˆ†é…å¤±è´¥ï¼" << endl;
-			exit(1);
-		}
-	}
-	~mystack()
-	{
-		delete[] mys;
-	}
-	bool Empty();//æ˜¯å¦ä¸ºç©º
-	void PUSH(T tp); //å‹æ ˆ
-	T TOP();//è¿”å›æ ˆé¡¶å…ƒç´ 
-	T SEC();//è¿”å›æ¬¡æ ˆé¡¶å…ƒç´ 
-	void POP();//å‡ºæ ˆ
-	int SIZE();//æ ˆå¤§å°
-};
-
+//¶¨ÒåmystackÖĞµÄ³ÉÔ±º¯Êı
 template<class T>
 bool mystack<T>::Empty()
 {
 	if (top != -1)
+	{
 		return mys[top];
+	}
 	else
 	{
-		cout << "æ ˆç©º\n";
+		cout << "Õ»¿Õ\n";
 		exit(1);
 	}
 }
@@ -107,10 +39,12 @@ template<class T>
 T  mystack<T>::TOP()
 {
 	if (top != -1)
+	{
 		return mys[top];
+	}
 	else
 	{
-		cout << "æ ˆç©ºa\n";
+		cout << "Õ»¿Õa\n";
 		exit(1);
 	}
 }
@@ -118,10 +52,12 @@ template<class T>
 T  mystack<T>::SEC()
 {
 	if (top != -1)
+	{
 		return mys[top - 1];
+	}
 	else
 	{
-		cout << "æ ˆä¸­åªæœ‰ä¸€ä¸ªå…ƒç´ \n";
+		cout << "Õ»ÖĞÖ»ÓĞÒ»¸öÔªËØ\n";
 		exit(1);
 	}
 }
@@ -129,21 +65,22 @@ template<class T>
 void mystack<T>::PUSH(T tp)
 {
 	if (top + 1 < maxsize)
+	{
 		mys[++top] = tp;
+	}
 	else
 	{
-		cout << "æ ˆæ»¡\n";
+		cout << "Õ»Âú\n";
 		exit(1);
 	}
 }
 template<class T>
 void mystack<T>::POP()
 {
-	if (top >= 0) 
-		top--;
+	if (top >= 0) top--;
 	else
 	{
-		cout << "æ ˆç©ºb\n";
+		cout << "Õ»¿Õb\n";
 		exit(1);
 	}
 }
@@ -154,30 +91,48 @@ int mystack<T>::SIZE()
 }
 
 
-void PUSHSEM(token operand)//å‹æ ˆï¼šæŠŠå½“å‰å­—ç¬¦æ”¾å…¥SEMä¸­ï¼Œåœ¨IDå’ŒNUMåè°ƒç”¨
+void WriteinFileL(string name, string content) //Ğ´ÈëÎÄ¼ş
 {
+	ofstream myfile;
+	myfile.open(name);
+	myfile << content << endl;
+	vector<token>::iterator iff;
+	for (iff = L.begin(); iff != L.end(); iff++)
+	{
+		myfile << (*iff).name << "\t" << (*iff).type << endl;
+	}
+	myfile.close();
+}
+
+void PUSHSEM(token operand)
+{//Ñ¹Õ»£º°Ñµ±Ç°token½á¹¹ÌåÀàĞÍ×Ö·û·ÅÈëSEMÖĞ£¬ÔÚIDºÍNUM£¨ÖÕ½á·û£©ºóµ÷ÓÃ
 	SEM.PUSH(operand);
 	sem++;
 }
 
-bool CompareType() 
-{//æ¯”è¾ƒæ¬¡æ ˆé¡¶å…ƒç´ ç±»å‹type_1å’Œæ ˆé¡¶å…ƒç´ ç±»å‹type_2æ˜¯å¦ç›¸åŒ
+bool CompareType()
+{//±È½Ï´ÎÕ»¶¥ÔªËØÀàĞÍtype_1ºÍÕ»¶¥ÔªËØÀàĞÍtype_2ÊÇ·ñÏàÍ¬
 	type_1 = searchType(func_name, SEM.SEC().name);
 	left_n.name = SEM.SEC().name + func_name;
-	if (type_1 == "no") {
+	if (type_1 == "no")
+	{
 		type_1 = searchType(SEM.SEC().name);
 		left_n.name = SEM.SEC().name;
-		if (type_1 == "no") {
+		if (type_1 == "no")
+		{
 			type_1 = searchType(func_name, to_string(stringToNum<int>(SEM.SEC().name)));
 			left_n.name = SEM.SEC().name;
-			if (type_1 == "no") {
+			if (type_1 == "no")
+			{
 				type_1 = searchType(to_string(stringToNum<int>(SEM.SEC().name)));
 				left_n.name = SEM.SEC().name;
-				if (type_1 == "no") {
+				if (type_1 == "no")
+				{
 					type_1 = searchType(SEM.SEC().name, SEM.SEC().name);
 					left_n.name = SEM.SEC().name + to_string(func_num++);
-					if (type_1 == "no") {
-						Error(token_g.row, token_g.content, "æ ‡è¯†ç¬¦æœªå®šä¹‰");
+					if (type_1 == "no")
+					{
+						Error(token_g.row, token_g.content, "±êÊ¶·ûÎ´¶¨Òå");
 						return false;
 					}
 				}
@@ -187,20 +142,25 @@ bool CompareType()
 
 	type_2 = searchType(func_name, SEM.TOP().name);
 	right_n.name = SEM.TOP().name + func_name;
-	if (type_2 == "no") {
+	if (type_2 == "no")
+	{
 		type_2 = searchType(SEM.TOP().name);
 		right_n.name = SEM.TOP().name;
-		if (type_2 == "no") {
+		if (type_2 == "no")
+		{
 			type_2 = searchType(func_name, to_string(stringToNum<int>(SEM.TOP().name)));
 			right_n.name = SEM.TOP().name;
-			if (type_2 == "no") {
+			if (type_2 == "no")
+			{
 				type_2 = searchType(to_string(stringToNum<int>(SEM.TOP().name)));
 				right_n.name = SEM.TOP().name;
-				if (type_2 == "no") {
+				if (type_2 == "no")
+				{
 					type_2 = searchType(SEM.TOP().name, SEM.TOP().name);
 					right_n.name = SEM.TOP().name + to_string(func_num);
-					if (type_2 == "no") {
-						Error(token_g.row, token_g.content, "æ ‡è¯†ç¬¦æœªå®šä¹‰");
+					if (type_2 == "no")
+					{
+						Error(token_g.row, token_g.content, "±êÊ¶·ûÎ´¶¨Òå");
 						return false;
 					}
 				}
@@ -214,22 +174,28 @@ bool CompareType()
 }
 
 string resvalue(string opeart)
-{//æ¬¡æ ˆé¡¶å…ƒç´ value_1å’Œæ ˆé¡¶å…ƒç´ value_2è¿›è¡Œé€»è¾‘è¿ç®—ï¼Œè¿”å›å››å…ƒå¼ç»“æœçš„é€»è¾‘è¿ç®—å€¼
+{//´ÎÕ»¶¥ÔªËØvalue_1ºÍÕ»¶¥ÔªËØvalue_2½øĞĞÂß¼­ÔËËã£¬·µ»ØËÄÔªÊ½½á¹ûµÄÂß¼­ÔËËãÖµ
 	string type = "no";
 
-	if (type == "no") {
+	if (type == "no")
+	{
 		type = searchType(func_name, SEM.TOP().name);
-		if (type == "no") {
+		if (type == "no")
+		{
 			type = searchType(SEM.TOP().name);
-			if (type == "no") {
+			if (type == "no")
+			{
 				type = searchType(func_name, to_string(stringToNum<int>(SEM.TOP().name)));
-				if (type == "no") {
+				if (type == "no")
+				{
 					type = searchType(to_string(stringToNum<int>(SEM.TOP().name)));
-					if (type == "no") {
+					if (type == "no")
+					{
 						type = searchType(SEM.TOP().name, SEM.TOP().name);
-						if (type == "no") {
-							Error(token_g.row, token_g.content, "æ ‡è¯†ç¬¦æœªå®šä¹‰");
-							return false;
+						if (type == "no")
+						{
+							Error(token_g.row, token_g.content, "±êÊ¶·ûÎ´¶¨Òå");
+							return "0";
 						}
 					}
 				}
@@ -238,16 +204,21 @@ string resvalue(string opeart)
 	}
 
 	value_1 = searchValue(func_name, SEM.SEC().name);
-	if (value_1 == "no") {
+	if (value_1 == "no")
+	{
 		value_1 = searchValue(SEM.SEC().name);
-		if (value_1 == "no") {
+		if (value_1 == "no")
+		{
 			value_1 = searchValue(func_name, to_string(stringToNum<int>(SEM.SEC().name)));
-			if (value_1 == "no") {
+			if (value_1 == "no")
+			{
 				value_1 = searchValue(to_string(stringToNum<int>(SEM.SEC().name)));
-				if (value_1 == "no") {
+				if (value_1 == "no")
+				{
 					value_1 = searchValue(SEM.SEC().name, SEM.SEC().name);
-					if (value_1 == "no") {
-						Error(token_g.row, token_g.content, "æ ‡è¯†ç¬¦æœªèµ‹å€¼");
+					if (value_1 == "no")
+					{
+						Error(token_g.row, token_g.content, "±êÊ¶·ûÎ´¸³Öµ");
 					}
 				}
 			}
@@ -255,25 +226,30 @@ string resvalue(string opeart)
 	}
 
 	value_2 = searchValue(func_name, SEM.TOP().name);
-	if (value_2 == "no") {
+	if (value_2 == "no")
+	{
 		value_2 = searchValue(SEM.TOP().name);
-		if (value_2 == "no") {
+		if (value_2 == "no")
+		{
 			value_2 = searchValue(func_name, to_string(stringToNum<int>(SEM.TOP().name)));
-			if (value_2 == "no") {
+			if (value_2 == "no")
+			{
 				value_2 = searchValue(to_string(stringToNum<int>(SEM.TOP().name)));
-				if (value_2 == "no") {
+				if (value_2 == "no")
+				{
 					value_2 = searchValue(SEM.TOP().name, SEM.TOP().name);
-					if (value_2 == "no") {
-						Error(token_g.row, token_g.content, "æ ‡è¯†ç¬¦æœªèµ‹å€¼");
+					if (value_2 == "no")
+					{
+						Error(token_g.row, token_g.content, "±êÊ¶·ûÎ´¸³Öµ");
 					}
 				}
 			}
 		}
 	}
 
-	string res_empty;//è‹¥æ²¡æœ‰åŒ¹é…çš„ç±»å‹ï¼Œåˆ™è¿”å›ç©ºä¸²
-	if (type == "int") {
-
+	string res_empty;//ÈôÃ»ÓĞÆ¥ÅäµÄÀàĞÍ£¬Ôò·µ»Ø¿Õ´®
+	if (type == "int")
+	{
 		int Val_1 = stringToNum<int>(value_1);
 		int Val_2 = stringToNum<int>(value_2);
 		int res;
@@ -304,7 +280,8 @@ string resvalue(string opeart)
 			res = Val_1 / Val_2;
 		return to_string(res);
 	}
-	else if (type == "double") {
+	else if (type == "double")
+	{
 		double Val_1 = stringToNum<double>(value_1);
 		double Val_2 = stringToNum<double>(value_2);
 		double res;
@@ -334,7 +311,8 @@ string resvalue(string opeart)
 			res = Val_1 / Val_2;
 		return to_string(res);
 	}
-	else if (type == "float") {
+	else if (type == "float")
+	{
 		float Val_1 = stringToNum<float>(value_1);
 		float Val_2 = stringToNum<float>(value_2);
 		float res;
@@ -364,7 +342,8 @@ string resvalue(string opeart)
 			res = Val_1 / Val_2;
 		return to_string(res);
 	}
-	else if (type == "char") {
+	else if (type == "char")
+	{
 		char Val_1 = stringToNum<char>(value_1);
 		char Val_2 = stringToNum<char>(value_2);
 		char res;
@@ -397,96 +376,100 @@ string resvalue(string opeart)
 	return res_empty;
 }
 
-
-void GEQ(string operat)
-{//è¿ç®—ç¬¦å››å…ƒå¼äº§ç”Ÿå¼
+void GEQ(string operat)/*Éú³ÉËÄÔªÊ½£ºÔËËã·û°üÀ¨&&¡¢||¡¢£¡=¡¢==¡¢>¡¢>=¡¢<¡¢<=¡¢+¡¢-¡¢*¡¢/
+						SEMÖĞÕ»¶¥ºÍ´ÎÕ»¶¥ÎªµÚÒ»ºÍµÚ¶ş²Ù×÷Êı
+						resÎª×Ô¶¯Éú³ÉµÄÁÙÊ±±äÁ¿
+						°ÑÕ»¶¥ºÍ´ÎÕ»¶¥Çå¿Õ£¬Éú³ÉµÄÁÙÊ±±äÁ¿´æÈë*/
+{//ÔËËã·ûËÄÔªÊ½²úÉúÊ½
 	{
 		char t = 't';
-		string ress = 't' + to_string(rr++);//ä¸´æ—¶ç»“æœå˜é‡ç”Ÿæˆ
-		//T_num.begin(), T_num.end()ä¸ºè¾“å…¥è¿­ä»£å™¨ï¼Œ[T_num.begin(), T_num.end()) ç”¨äºæŒ‡å®šè¯¥å‡½æ•°çš„æŸ¥æ‰¾èŒƒå›´ï¼›ressä¸ºè¦æŸ¥æ‰¾çš„ç›®æ ‡å…ƒç´ 
-		//å…ˆæŸ¥æ‰¾æŸä¸ªä¸´æ—¶å˜é‡æ˜¯å¦äº§ç”Ÿ
+		string ress = 't' + to_string(rr++);//ÁÙÊ±½á¹û±äÁ¿Éú³É
+		//T_num.begin(), T_num.end()ÎªÊäÈëµü´úÆ÷£¬[T_num.begin(), T_num.end()) ÓÃÓÚÖ¸¶¨¸Ãº¯ÊıµÄ²éÕÒ·¶Î§£»ressÎªÒª²éÕÒµÄÄ¿±êÔªËØ
+		//ÏÈ²éÕÒÄ³¸öÁÙÊ±±äÁ¿ÊÇ·ñ²úÉú
 		vector<string>::iterator result = find(T_num.begin(), T_num.end(), ress);
 
-		while (result != T_num.end()) //æ²¡æŸ¥åˆ°åˆ™ç”Ÿæˆæ–°çš„ä¸´æ—¶å˜é‡
+		while (result != T_num.end()) //Ã»²éµ½ÔòÉú³ÉĞÂµÄÁÙÊ±±äÁ¿
 		{
-			string ress = 't' + to_string(rr++);//ä¸´æ—¶ç»“æœå˜é‡ç”Ÿæˆï¼Œrrä¸ºå…¨å±€å˜é‡è®°å½•ä¸´æ—¶å˜é‡ä¸ªæ•°
+			string ress = 't' + to_string(rr++);//ÁÙÊ±½á¹û±äÁ¿Éú³É£¬rrÎªÈ«¾Ö±äÁ¿¼ÇÂ¼ÁÙÊ±±äÁ¿¸öÊı
 			vector<string>::iterator result = find(T_num.begin(), T_num.end(), ress);
 		}
 
-		left_n.type = SEM.SEC().type;//å·¦æ“ä½œæ•°ä¸ºæ¬¡æ ˆé¡¶å…ƒç´ 
+		left_n.type = SEM.SEC().type;//×ó²Ù×÷ÊıÎª´ÎÕ»¶¥ÔªËØ
 		left_n.active = false;
-		right_n.type = SEM.TOP().type;//å³æ“ä½œæ•°ä¸ºæ ˆé¡¶å…ƒç´ 
+		right_n.type = SEM.TOP().type;//ÓÒ²Ù×÷ÊıÎªÕ»¶¥ÔªËØ
 		right_n.active = false;
 
-		token Res;//åˆå§‹åŒ–ä¸€ä¸ªç”¨äºæš‚å­˜ä¿¡æ¯çš„ä¸´æ—¶å˜é‡
+		token Res;//³õÊ¼»¯Ò»¸öÓÃÓÚÔİ´æĞÅÏ¢µÄÁÙÊ±±äÁ¿
 		Res.name = ress;
-		Res.type = 3;//type=3è¡¨ç¤ºä¸´æ—¶å˜é‡
+		Res.type = 3;//type=3±íÊ¾ÁÙÊ±±äÁ¿
 		Res.active = false;
 
-		res_n.type = 3;//å†™å…¥å››å…ƒå¼çš„ç»“æœ
-		if (func_name != "no")//åˆ¤æ–­å‡½æ•°ä¸­çš„å˜é‡orå…¨å±€å˜é‡
+		res_n.type = 3;//Ğ´ÈëËÄÔªÊ½µÄ½á¹û
+		if (func_name != "no")//ÅĞ¶Ïº¯ÊıÖĞµÄ±äÁ¿orÈ«¾Ö±äÁ¿
 			res_n.name = ress + func_name;
 		else
 			res_n.name = ress;
 
 		res_n.active = false;
 
-		if (CompareType() == true) {
-			string value = resvalue(operat);//è®¡ç®—ä¸´æ—¶å˜é‡å€¼ï¼Œå¹¶ä¿å­˜ä¸ºstringç±»å‹
-
-			if (func_name == "no") {
-				saveGlobal(Res.name, type_1, value);//ä¿å­˜å…¨å±€ä¸´æ—¶å˜é‡ç»“æœ
+		if (CompareType() == true)
+		{
+			string value = resvalue(operat);//¼ÆËãÁÙÊ±±äÁ¿Öµ£¬²¢±£´æÎªstringÀàĞÍ
+			if (func_name == "no")
+			{
+				saveGlobal(Res.name, type_1, value);//±£´æÈ«¾ÖÁÙÊ±±äÁ¿½á¹û
 			}
-			else {
-				saveTemp(func_name, Res.name, type_1, value);//ä¿å­˜ä¸´æ—¶å˜é‡ç»“æœ
+			else
+			{
+				saveTemp(func_name, Res.name, type_1, value);//±£´æÁÙÊ±±äÁ¿½á¹û
 			}
-			qt.push_back({ operat, left_n , right_n , res_n });//å‹å…¥å››å…ƒå¼åŒº
+			qt.push_back({ operat, left_n , right_n , res_n });//Ñ¹ÈëËÄÔªÊ½Çø
 
-			//å¼¹å‡ºæ ˆé¡¶çš„ä¸¤ä¸ªæ“ä½œå¯¹è±¡
+			//µ¯³öÕ»¶¥µÄÁ½¸ö²Ù×÷¶ÔÏó
 			SEM.POP();
 			SEM.POP();
 
 			PUSHSEM(Res);
 		}
-		else {
-			Error(token_g.row, token_g.content, "ç±»å‹ä¸åŒ¹é…");
+		else
+		{
+			Error(token_g.row, token_g.content, "ÀàĞÍ²»Æ¥Åä");
 		}
 	}
 }
-
 void ASSI()
-{//èµ‹å€¼å››å…ƒå¼ç”Ÿæˆï¼šè¿ç®—ç¬¦=  ç¬¬ä¸€æ“ä½œæ•°ä¸ºSEMæ ˆé¡¶ï¼Œç¬¬äºŒæ“ä½œæ•°ä¸ºç©º ç»“æœresä¸ºæ¬¡æ ˆé¡¶ï¼Œæ ˆé¡¶å’Œæ¬¡æ ˆé¡¶å¼¹æ ˆ
-	token null_point;//ç©ºæ“ä½œå¯¹è±¡
+{//¸³ÖµËÄÔªÊ½Éú³É£ºÔËËã·û=  µÚÒ»²Ù×÷ÊıÎªSEMÕ»¶¥£¬µÚ¶ş²Ù×÷ÊıÎª¿Õ ½á¹ûresÎª´ÎÕ»¶¥£¬Õ»¶¥ºÍ´ÎÕ»¶¥µ¯Õ»
+	token null_point;//¿Õ²Ù×÷¶ÔÏó
 	null_point.name = "";
 	null_point.type = 0;
 
-	int flag = 0;//æ ‡å¿—å˜é‡æ²¡æœ‰èµ‹å€¼çš„å››å…ƒå¼
-	//åˆå§‹åŒ–å››å…ƒå¼
+	int flag = 0;//±êÖ¾±äÁ¿Ã»ÓĞ¸³ÖµµÄËÄÔªÊ½
+	//³õÊ¼»¯ËÄÔªÊ½
 	left_n.type = SEM.SEC().type;
 	left_n.active = false;
 	right_n.type = SEM.TOP().type;
 	right_n.active = false;
 
-	if (SEM.TOP().type == 1)//ç­‰å·å³ä¾§æ˜¯å¸¸é‡ 
+	if (SEM.TOP().type == 1)//µÈºÅÓÒ²àÊÇ³£Á¿ 
 	{
-		if (func_name != "no") //ä¸æ˜¯ç”¨æˆ·å®šä¹‰çš„å…¨å±€å˜é‡
+		if (func_name != "no") //²»ÊÇÓÃ»§¶¨ÒåµÄÈ«¾Ö±äÁ¿
 		{
 			if (CompareType() == true)
 			{
 				if (type_1 == "int")
-				{//æ¬¡æ ˆé¡¶ä¸ºæ•´å‹å¸¸é‡ï¼Œéœ€è¦ç”¨to_string()è½¬æ¢å¸¸æ•°ä¸ºå­—ç¬¦ä¸²ï¼ŒæŸ¥è¯¢æ ˆé¡¶å…ƒç´ 
+				{//´ÎÕ»¶¥ÎªÕûĞÍ³£Á¿£¬ĞèÒªÓÃto_string()×ª»»³£ÊıÎª×Ö·û´®£¬²éÑ¯Õ»¶¥ÔªËØ
 					if (searchValue(func_name, to_string(stringToNum<int>(SEM.TOP().name))) != "no")
-					{//æ ˆé¡¶å…ƒç´ ä¸ºéå…¨å±€å˜é‡å’Œä¸´æ—¶å˜é‡å€¼ï¼Œå°†æ ˆé¡¶å…ƒç´ å€¼èµ‹å€¼ç»™æ¬¡æ ˆé¡¶å…ƒç´ 
+					{//Õ»¶¥ÔªËØÎª·ÇÈ«¾Ö±äÁ¿ºÍÁÙÊ±±äÁ¿Öµ£¬½«Õ»¶¥ÔªËØÖµ¸³Öµ¸ø´ÎÕ»¶¥ÔªËØ
 						saveAdmin(func_name, SEM.SEC().name, searchValue(func_name, to_string(stringToNum<int>(SEM.TOP().name))));
 					}
 					else
-					{//æ ˆé¡¶å…ƒç´ ä¸ºå…¨å±€å˜é‡å€¼
+					{//Õ»¶¥ÔªËØÎªÈ«¾Ö±äÁ¿Öµ
 						saveAdmin(func_name, SEM.SEC().name, searchValue(to_string(stringToNum<int>(SEM.TOP().name))));
 					}
 				}
 				else
-				{//å…¶ä»–ç±»å‹å¸¸é‡ç›´æ¥æŸ¥è¯¢nameï¼Œæ— éœ€è½¬æ¢ï¼Œä¸ä¸Šè¿°æ“ä½œä¸€è‡´
-					if (searchValue(func_name, SEM.TOP().name) != "no") ã€
+				{//ÆäËûÀàĞÍ³£Á¿Ö±½Ó²éÑ¯name£¬ÎŞĞè×ª»»£¬ÓëÉÏÊö²Ù×÷Ò»ÖÂ
+					if (searchValue(func_name, SEM.TOP().name) != "no")
 					{
 						saveAdmin(func_name, SEM.SEC().name, searchValue(func_name, SEM.TOP().name));
 					}
@@ -497,50 +480,50 @@ void ASSI()
 				}
 			}
 			else
-				Error(token_g.row, token_g.content, "ç±»å‹ä¸åŒ¹é…");
+				Error(token_g.row, token_g.content, "ÀàĞÍ²»Æ¥Åä");
 		}
-		else if (func_name == "no") //ç­‰å·å³ä¾§æ˜¯ç”¨æˆ·å®šä¹‰çš„å…¨å±€å˜é‡
+		else if (func_name == "no") //µÈºÅÓÒ²àÊÇÓÃ»§¶¨ÒåµÄÈ«¾Ö±äÁ¿
 		{
 			if (CompareType() == true)
 			{
-				if (type_1 == "int")//èµ‹å€¼å‡½æ•°å˜ä¸ºä¿å­˜ç”¨æˆ·å®šä¹‰çš„å…¨å±€å˜é‡å‡½æ•°
+				if (type_1 == "int")//¸³Öµº¯Êı±äÎª±£´æÓÃ»§¶¨ÒåµÄÈ«¾Ö±äÁ¿º¯Êı
 					saveGlobal(SEM.SEC().name, searchValue(to_string(stringToNum<int>(SEM.TOP().name))));
 				else
 					saveGlobal(SEM.SEC().name, searchValue(SEM.TOP().name));
 			}
 			else
-				Error(token_g.row, token_g.content, "ç±»å‹ä¸åŒ¹é…");
+				Error(token_g.row, token_g.content, "ÀàĞÍ²»Æ¥Åä");
 		}
 	}
 
-	else if (SEM.TOP().type == 3 || SEM.TOP().type == 2)//ç­‰å·å³ä¾§æ˜¯å˜é‡ 
+	else if (SEM.TOP().type == 3 || SEM.TOP().type == 2)//µÈºÅÓÒ²àÊÇ±äÁ¿ 
 	{
-		if (func_name != "no") //ä¸æ˜¯ç”¨æˆ·å®šä¹‰çš„å…¨å±€å˜é‡
+		if (func_name != "no") //²»ÊÇÓÃ»§¶¨ÒåµÄÈ«¾Ö±äÁ¿
 		{
 			if (CompareType() == true)
 			{
 				if (searchValue(func_name, SEM.TOP().name) == "no")
-				{//æŸ¥æ ˆé¡¶å…ƒç´ éå…¨å±€å’Œä¸´æ—¶å˜é‡å€¼
+				{//²éÕ»¶¥ÔªËØ·ÇÈ«¾ÖºÍÁÙÊ±±äÁ¿Öµ
 					if (searchValue(SEM.TOP().name) == "no")
-					{//æŸ¥æ ˆé¡¶å…ƒç´ å…¨å±€å˜é‡å€¼
+					{//²éÕ»¶¥ÔªËØÈ«¾Ö±äÁ¿Öµ
 						if (searchValue(SEM.TOP().name, SEM.TOP().name) == "no")
-						{//
+						{
 							flag = 1;
-							Error(token_g.row, token_g.content, "å˜é‡æœªèµ‹å€¼");
+							Error(token_g.row, token_g.content, "±äÁ¿Î´¸³Öµ");
 						}
 						else
 							saveAdmin(func_name, SEM.SEC().name, searchValue(SEM.TOP().name, SEM.TOP().name));
 					}
-					else 
+					else
 						saveAdmin(func_name, SEM.SEC().name, searchValue(SEM.TOP().name, SEM.TOP().name));
 				}
 				else
 					saveAdmin(func_name, SEM.SEC().name, searchValue(func_name, SEM.TOP().name));
 			}
 			else
-				Error(token_g.row, token_g.content, "ç±»å‹ä¸åŒ¹é…");
+				Error(token_g.row, token_g.content, "ÀàĞÍ²»Æ¥Åä");
 		}
-		else if (func_name == "no") //æ˜¯ç”¨æˆ·å®šä¹‰çš„å…¨å±€å˜é‡
+		else if (func_name == "no") //ÊÇÓÃ»§¶¨ÒåµÄÈ«¾Ö±äÁ¿
 		{
 			if (CompareType() == true)
 			{
@@ -551,7 +534,7 @@ void ASSI()
 						if (searchValue(SEM.TOP().name, SEM.TOP().name) == "no")
 						{
 							flag = 1;
-							Error(token_g.row, token_g.content, "å˜é‡æœªèµ‹å€¼");
+							Error(token_g.row, token_g.content, "±äÁ¿Î´¸³Öµ");
 						}
 						else
 							saveGlobal(SEM.SEC().name, searchValue(SEM.TOP().name, SEM.TOP().name));
@@ -563,24 +546,22 @@ void ASSI()
 					saveGlobal(SEM.SEC().name, searchValue(func_name, SEM.TOP().name));
 			}
 			else
-				Error(token_g.row, token_g.content, "ç±»å‹ä¸åŒ¹é…");
+				Error(token_g.row, token_g.content, "ÀàĞÍ²»Æ¥Åä");
 		}
 	}
 
-	if (flag == 1) {
-		qt.push_back({ "=", right_n, null_point , left_n });
-	}
-	else {
+	if (flag == 0)
+	{
 		qt.push_back({ "=", right_n, null_point , left_n });
 	}
 
-	//æ¸…ç©ºä¸¤ä¸ªå…ƒç´ åæŒ‡å‘æ ˆé¡¶å…ƒç´ 
+	//Çå¿ÕÁ½¸öÔªËØºóÖ¸ÏòÕ»¶¥ÔªËØ
 	SEM.POP();
 	SEM.POP();
 }
 
-void IF()/*ifè¯­å¥å››å…ƒå¼ç”Ÿæˆï¼šè¿ç®—ç¬¦if   ç¬¬ä¸€è¿ç®—å¯¹è±¡ä¸ºæ ˆé¡¶å…ƒç´ SEM[sem],ç¬¬äºŒè¿ç®—å¯¹è±¡å’Œç»“æœä¸ºç©º
-		 æ ˆé¡¶å…ƒç´ å¼¹æ ˆ*/
+void IF()/*ifÓï¾äËÄÔªÊ½Éú³É£ºÔËËã·ûif   µÚÒ»ÔËËã¶ÔÏóÎªÕ»¶¥ÔªËØSEM[sem],µÚ¶şÔËËã¶ÔÏóºÍ½á¹ûÎª¿Õ
+		 Õ»¶¥ÔªËØµ¯Õ»*/
 {
 	token null_point;
 	null_point.name = "";
@@ -589,33 +570,37 @@ void IF()/*ifè¯­å¥å››å…ƒå¼ç”Ÿæˆï¼šè¿ç®—ç¬¦if   ç¬¬ä¸€è¿ç®—å¯¹è±¡ä¸ºæ ˆé¡¶å…
 	qt.push_back({ "if", right_n, null_point, null_point });
 
 	SEM.POP();
+
 }
-void EL()/*elseè¯­å¥å››å…ƒå¼ç”Ÿæˆï¼šè¿ç®—ç¬¦el å…¶ä»–ä¸ºç©º SEMæ— æ“ä½œ*/
+void EL()/*elseÓï¾äËÄÔªÊ½Éú³É£ºÔËËã·ûel ÆäËûÎª¿Õ SEMÎŞ²Ù×÷*/
 {
 	token null_point;
 	null_point.name = "";
 	null_point.type = 0;
 
 	qt.push_back({ "el", null_point , null_point , null_point });
+
 }
-void IE()/*ç»“æŸå››å…ƒå¼ï¼šè¿ç®—ç¬¦ie å…¶ä»–ä¸ºç©º SEMæ— æ“ä½œ*/
+void IE()/*½áÊøËÄÔªÊ½£ºÔËËã·ûie ÆäËûÎª¿Õ SEMÎŞ²Ù×÷*/
 {
 	token null_point;
 	null_point.name = "";
 	null_point.type = 0;
 
 	qt.push_back({ "ie",null_point , null_point, null_point });
+
 }
-void WH()/*whileå¾ªç¯å¤´å‡½æ•°ï¼šwh å…¶ä»–ä¸ºç©º SEMæ— æ“ä½œ*/
+void WH()/*whileÑ­»·Í·º¯Êı£ºwh ÆäËûÎª¿Õ SEMÎŞ²Ù×÷*/
 {
 	token null_point;
 	null_point.name = "";
 	null_point.type = 0;
 
 	qt.push_back({ "wh", null_point , null_point , null_point });
+
 }
-void DO()/*doå‡½æ•°ï¼šdo ç¬¬ä¸€æ“ä½œæ•°ä¸ºæ ˆé¡¶å…ƒç´  ç¬¬äºŒä¸ºç©º ç»“æœä¸ºç©º
-		 æ ˆé¡¶å…ƒç´ å¼¹å‡º*/
+void DO()/*doº¯Êı£ºdo µÚÒ»²Ù×÷ÊıÎªÕ»¶¥ÔªËØ µÚ¶şÎª¿Õ ½á¹ûÎª¿Õ
+		 Õ»¶¥ÔªËØµ¯³ö*/
 {
 	token null_point;
 	null_point.name = "";
@@ -625,7 +610,7 @@ void DO()/*doå‡½æ•°ï¼šdo ç¬¬ä¸€æ“ä½œæ•°ä¸ºæ ˆé¡¶å…ƒç´  ç¬¬äºŒä¸ºç©º ç»“æœä¸ºç©
 
 	SEM.POP();
 }
-void WE()/*å¾ªç¯å°¾ï¼šwe å…¶ä»–ç©º SEMæ— æ“ä½œ*/
+void WE()/*Ñ­»·Î²£ºwe ÆäËû¿Õ SEMÎŞ²Ù×÷*/
 {
 	token null_point;
 	null_point.name = "";
@@ -634,7 +619,8 @@ void WE()/*å¾ªç¯å°¾ï¼šwe å…¶ä»–ç©º SEMæ— æ“ä½œ*/
 	qt.push_back({ "we", null_point ,null_point, null_point });
 
 }
-void RET()//RETURNè¯­å¥ï¼šç¬¬ä¸€æ“ä½œæ•°
+
+void RET()//RETURNÓï¾ä£ºµÚÒ»²Ù×÷Êı
 {
 	token null_point;
 	null_point.name = "";
@@ -660,4 +646,18 @@ void RET()//RETURNè¯­å¥ï¼šç¬¬ä¸€æ“ä½œæ•°
 	}
 
 	qt.push_back({ "RET",right_n ,null_point,null_point });
+}
+
+void WriteQt(string name, string content)
+{
+	ofstream myfile;
+	myfile.open(name);
+	myfile << content << endl;
+	vector<QT>::iterator iff;
+	for (iff = qt.begin(); iff != qt.end(); iff++)
+	{
+
+		myfile << (*iff).Operat << "\t" << (*iff).opA.name << "\t" << (*iff).opB.name << "\t" << (*iff).res.name << "\t" << (*iff).block << endl;
+	}
+	myfile.close();
 }
