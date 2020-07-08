@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #ifndef _HEAD4_H
 #define _HEAD4_H
 #include<string>
@@ -9,6 +8,7 @@
 #include<fstream>
 
 #include"Óï·¨·ÖÎö.h"
+
 using namespace std;
 
 struct TypeSheet;
