@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #ifndef _HEAD3_H
 #define _HEAD3_H
 #define _HEAD_QT
@@ -100,7 +99,6 @@ Type stringToNum(const string& str)
 extern mystack<token> SEM;
 bool CompareType();
 string resvalue(string opeart);
-void ASSI();
 void WriteinFileL(string name, string content);
 void PUSHSEM(token operand);//Ð´ÈëÎÄ¼þ
 void GEQ(string operat);

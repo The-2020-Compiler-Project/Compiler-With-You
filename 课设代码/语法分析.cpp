@@ -42,7 +42,7 @@ int parapos = 0;
 int arr_num_qt = 0;
 int fnum_g;	//用来记录形参个数
 int offset_g;	//用来记录偏移量
-int global_offset_g;
+int global_offset_g;//记录全局偏移量
 int func_call_num = 0;
 queue<MainSheet*> tempMainSheetpointers;//用来暂存形参标识符（因为形参既要填到符号表也要填到形参表）
 
@@ -1647,5 +1647,227 @@ int Primary()
 	else
 	{
 		return 0;
+	}
+}
+
+
+
+
+//********************函数
+
+int Paraters() {
+	if (Type() == 1) {
+		if (ID() == 1) {
+
+			token in;//普通函数定义
+			in = { id_g+func_name ,2,false };
+			PUSHSEM(in);
+			PARA_n();
+			/*语义动作开始*/
+			fnum_g++;								//形参个数加1
+
+			checkParas(id_g);		//在形参表中查重，如果重定义了，程序会结束
+
+
+			MainSheet* tempMainSheet = new MainSheet;		//创建一个指向MainSheet的指针
+			tempMainSheet->flag = 1;
+
+			if (para_g == NULL) {
+				para_g = new ParaSheet;					//创建一个指向形参表的指针
+			}
+			else {
+				showErrowWhenCreateASheet("para_g");
+			}
+			para_g->content = id_g;
+			tempMainSheet->content = id_g;
+
+			tempMainSheet->category = "vn";
+
+			writeTypeSheet(type_g);					   //使用typeSheet_g创建一个新的类型表
+			TypeSheet* tempTypeSheet = new TypeSheet;
+
+			tempTypeSheet->typevalue = type_g;
+			tempTypeSheet->tpoint = NULL;
+
+			para_g->type = typeSheet_g;
+			tempMainSheet->type = tempTypeSheet;
+			;
+			typeSheet_g = NULL;
+			tempTypeSheet = NULL;
+
+
+			writeLevelAndOffsetAndValue(funcSheet_g->level, offset_g);//
+			if (type_g == "int") {
+				levelAndOffsetAndValue_g->value = "1";
+			}
+			else if (type_g == "char") {
+				levelAndOffsetAndValue_g->value = "a";
+			}
+			else if (type_g == "float" || type_g == "double") {
+				levelAndOffsetAndValue_g->value = "1.0";
+			}
+
+			LevelAndOffsetAndValue* tempLevelAndOffsetAndValue = new LevelAndOffsetAndValue;
+
+			tempLevelAndOffsetAndValue->level = funcSheet_g->level;
+			tempLevelAndOffsetAndValue->offset = offset_g;
+			if (type_g == "int") {
+				tempLevelAndOffsetAndValue->value = "1";
+			}
+			else if (type_g == "char") {
+				tempLevelAndOffsetAndValue->value = "a";
+			}
+			else if (type_g == "float" || type_g == "double") {
+				tempLevelAndOffsetAndValue->value = "1.0";
+			}
+
+			if (type_g == "int" || type_g == "float") {
+				offset_g += 4;
+			}
+			else if (type_g == "char") {
+				offset_g += 1;
+			}
+			else if (type_g == "double") {
+				offset_g += 8;
+			}					/至此一个LevelAndOffset表填完
+
+			para_g->addr = levelAndOffsetAndValue_g;
+			tempMainSheet->addr = tempLevelAndOffsetAndValue;
+
+			levelAndOffsetAndValue_g = NULL;
+			tempLevelAndOffsetAndValue = NULL;
+			paras_g->push_back(para_g);					//将一个形参表指针压入paras_g中
+			para_g = NULL;
+			//tempMainSheet进队列，待以后填写到符号表
+			tempMainSheetpointers.push(tempMainSheet);
+			/*语义动作结束
+			总结：
+				目前，synbollistToFunc_g还没有进入总vector
+				mainSheet_g还有函数表没填写
+				funcSheet_g还有形参个数，参数表，入口地址没写
+			接下来：
+				要进入)
+			*/
+
+			if (Other_Type_ID() == 1) {
+				return 1;
+			}
+			else {
+				ErrorAndShow(token_g.row, token_g.content, "出错");
+			}
+		}
+		else {
+			ErrorAndShow(token_g.row, token_g.content, "应该是标识符的地方不是标识符");
+		}
+	}
+	else {
+		return 1;
+	}
+}
+
+int Other_Type_ID() {//函数有多个变量
+	if (token_g.content == ",") {
+		token_g = lexer_g.createAToken();
+		if (Type() == 1) {
+			if (ID() == 1) {							//向符号表中填入形参
+
+				/*语义动作开始*/
+				fnum_g++;								//形参个数加1
+
+				checkParas(id_g);		//在形参表中查重，如果重定义了，程序会结束
+
+
+				MainSheet* tempMainSheet = new MainSheet;		//创建一个指向MainSheet的指针
+				tempMainSheet->flag = 1;
+
+				if (para_g == NULL) {
+					para_g = new ParaSheet;					//创建一个指向形参表的指针
+				}
+				else {
+					showErrowWhenCreateASheet("para_g");
+				}
+				para_g->content = id_g;
+				tempMainSheet->content = id_g;
+
+				tempMainSheet->category = "vn";
+
+				writeTypeSheet(type_g);					   //使用typeSheet_g创建一个新的类型表
+				TypeSheet* tempTypeSheet = new TypeSheet;
+
+				tempTypeSheet->typevalue = type_g;
+				tempTypeSheet->tpoint = NULL;
+
+				para_g->type = typeSheet_g;
+				tempMainSheet->type = tempTypeSheet;
+				;
+				typeSheet_g = NULL;
+				tempTypeSheet = NULL;
+
+
+
+				writeLevelAndOffsetAndValue(funcSheet_g->level, offset_g);//
+				if (type_g == "int") {
+					levelAndOffsetAndValue_g->value = "1";
+				}
+				else if (type_g == "char") {
+					levelAndOffsetAndValue_g->value = "a";
+				}
+				else if (type_g == "float" || type_g == "double") {
+					levelAndOffsetAndValue_g->value = "1.0";
+				}
+
+				LevelAndOffsetAndValue* tempLevelAndOffsetAndValue = new LevelAndOffsetAndValue;
+
+				tempLevelAndOffsetAndValue->level = funcSheet_g->level;
+				tempLevelAndOffsetAndValue->offset = offset_g;
+				if (type_g == "int") {
+					tempLevelAndOffsetAndValue->value = "1";
+				}
+				else if (type_g == "char") {
+					tempLevelAndOffsetAndValue->value = "a";
+				}
+				else if (type_g == "float" || type_g == "double") {
+					tempLevelAndOffsetAndValue->value = "1.0";
+				}
+
+				if (type_g == "int" || type_g == "float") {
+					offset_g += 4;
+				}
+				else if (type_g == "char") {
+					offset_g += 1;
+				}
+				else if (type_g == "double") {
+					offset_g += 8;
+				}		//至此一个LevelAndOffset表填完
+
+				para_g->addr = levelAndOffsetAndValue_g;
+				tempMainSheet->addr = tempLevelAndOffsetAndValue;
+
+				levelAndOffsetAndValue_g = NULL;
+				tempLevelAndOffsetAndValue = NULL;
+				paras_g->push_back(para_g);					//将一个形参表指针压入paras_g中
+				para_g = NULL;
+				//tempMainSheet进队列，待以后填写到符号表
+				tempMainSheetpointers.push(tempMainSheet);
+				/*语义动作结束*/
+
+
+				if (Other_Type_ID() == 1) {
+					return 1;
+				}
+				else {
+					ErrorAndShow(token_g.row, token_g.content, "出错");
+				}
+			}
+			else {
+				ErrorAndShow(token_g.row, token_g.content, "应该出现标识符的地方出错");
+			}
+		}
+		else {
+			ErrorAndShow(token_g.row, token_g.content, "出错");
+		}
+	}
+	else {
+		return 1;
 	}
 }
