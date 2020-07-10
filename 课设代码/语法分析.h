@@ -1,5 +1,7 @@
 #pragma once
 #pragma once
+#pragma once
+#pragma once
 #ifndef _HEAD5_H
 #define _HEAD5_H
 #include"词法分析器.h"
@@ -34,7 +36,7 @@ int Variable_Type();//变量类型
 int ID();//标识符
 int NumCharID();//初始化常量
 int ZeroOrMoreDeclation();//声明列表
-int Declation();//声明当前字符的类型
+int Declaration();//声明当前字符的类型
 int Const_Declaration();//常量定义const
 int Variable_Declaration();//变量定义（数组、函数）
 int Array_Declaration();//数组声明、变量初始化、函数定义、变量声明
@@ -58,6 +60,22 @@ int MD_Expression_1();
 int Factor();
 int Primary();//终结符
 
-
+int Paraters();			//形参
+int Realparaters();
+int Realparaters_2();
+int Realparaters_3();
+int Other_Type_ID();
+int ArrFunc();//访问数组
 
 #endif
+
+
+
+
+
+
+
+
+
+
+

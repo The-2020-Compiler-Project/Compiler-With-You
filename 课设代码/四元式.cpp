@@ -11,7 +11,6 @@ string value_1; //²Ù×÷ÊýÖµ
 string value_2;
 
 vector <token> L; //»îÔ¾ÐÅÏ¢
-vector <token> LL;//£¿£¿£¿£¿
 
 token left_n;
 token right_n;
@@ -132,7 +131,7 @@ bool CompareType()
 					left_n.name = SEM.SEC().name + to_string(func_num++);
 					if (type_1 == "no")
 					{
-						Error(token_g.row, token_g.content, "±êÊ¶·ûÎ´¶¨Òå");
+						Error(token_g.row, token_g.content, "±êÊ¶·ûÎ´ÉùÃ÷");
 						return false;
 					}
 				}
@@ -160,7 +159,7 @@ bool CompareType()
 					right_n.name = SEM.TOP().name + to_string(func_num);
 					if (type_2 == "no")
 					{
-						Error(token_g.row, token_g.content, "±êÊ¶·ûÎ´¶¨Òå");
+						Error(token_g.row, token_g.content, "±êÊ¶·ûÎ´ÉùÃ÷");
 						return false;
 					}
 				}
@@ -567,7 +566,7 @@ void IF()/*ifÓï¾äËÄÔªÊ½Éú³É£ºÔËËã·ûif   µÚÒ»ÔËËã¶ÔÏóÎªÕ»¶¥ÔªËØSEM[sem],µÚ¶þÔËËã¶
 	null_point.name = "";
 	null_point.type = 0;
 
-	qt.push_back({ "if", right_n, null_point, null_point });
+	qt.push_back({ "if", res_n, null_point, null_point });
 
 	SEM.POP();
 
@@ -606,7 +605,7 @@ void DO()/*doº¯Êý£ºdo µÚÒ»²Ù×÷ÊýÎªÕ»¶¥ÔªËØ µÚ¶þÎª¿Õ ½á¹ûÎª¿Õ
 	null_point.name = "";
 	null_point.type = 0;
 
-	qt.push_back({ "do", right_n, null_point , null_point });
+	qt.push_back({ "do", res_n, null_point , null_point });
 
 	SEM.POP();
 }
@@ -661,3 +660,117 @@ void WriteQt(string name, string content)
 	}
 	myfile.close();
 }
+//**************************************************************
+void FUNC()//¶¨Òåº¯Êý¿ªÊ¼Óï¾ä£¬µÚÒ»²Ù×÷ÊýÎªº¯ÊýÃû
+{
+	token null_point;
+	null_point.name = func_name;
+	null_point.type = 0;
+
+	token null_point_n;
+	null_point_n.name = "";
+	null_point_n.type = 0;
+
+	qt.push_back({ "FUNC",null_point_n,null_point_n,null_point });//Õ»¶¥ÄÚÈÝ¼´Îª¶¨Òåº¯ÊýÃû£¬Ò²ÊÇ×ó²Ù×÷Êý
+
+}
+
+void MAIN()//Ö÷º¯Êý¿ªÊ¼Óï¾ä
+{
+	token null_point;
+	null_point.name = "";
+	null_point.type = 0;
+
+	qt.push_back({ "MAIN",null_point,null_point,null_point });//Ö÷º¯Êý¿ªÊ¼ËÄÔªÊ½
+}
+
+void PARA()//º¯Êý²ÎÊý
+{
+	token null_point;
+	null_point.name = "";
+	null_point.type = 0;
+
+	if (SEM.TOP().type == 3) {
+		right_n.active = false;
+		right_n.name = SEM.TOP().name + func_name;
+		right_n.type = 3;
+	}
+	else if (SEM.TOP().type == 2) {
+		right_n.active = false;
+		right_n.name = SEM.TOP().name + func_name;
+		right_n.type = 2;
+	}
+
+	else if (SEM.TOP().type == 1) {
+		right_n.active = false;
+		right_n.name = SEM.TOP().name;
+		right_n.type = 1;
+	}
+
+	if (TypeOfPara(func_call, parapos) == searchType(func_name, SEM.TOP().name)) {
+		qt.push_back({ "para",right_n,null_point,null_point });//Õ»¶¥ÄÚÈÝ¼´Îªº¯Êý²ÎÊý£¬Ò²ÊÇ×ó²Ù×÷Êý
+	}
+	else if (TypeOfPara(func_call, parapos) == searchType(func_name, to_string(stringToNum<int>(SEM.TOP().name)))) {
+		qt.push_back({ "para",right_n,null_point,null_point });//Õ»¶¥ÄÚÈÝ¼´Îªº¯Êý²ÎÊý£¬Ò²ÊÇ×ó²Ù×÷Êý
+	}
+	else {
+		Error(token_g.row, token_g.content, "º¯Êý²ÎÊýÀàÐÍ²»Æ¥Åä");
+	}
+
+	SEM.POP();
+
+
+}
+
+void CALL()//¹ý³Ìµ÷ÓÃ£ºµÚÒ»²Ù×÷Êýµ÷ÓÃº¯ÊýÃû
+{
+
+	token null_point;
+	null_point.name = "";
+	null_point.type = 0;
+
+
+	if (searchType(SEM.TOP().name, SEM.TOP().name) == "no") {
+		Error(token_g.row, token_g.content, "º¯ÊýÎ´¶¨Òå");
+	}
+
+	token null_point_n;
+	null_point_n.name = SEM.TOP().name /*+ to_string(func_call_num++)*/;
+	null_point_n.type = 3;
+
+	qt.push_back({ "call",null_point_n ,null_point,null_point });
+
+}
+
+void PARA_n() {
+	token null_point;
+	null_point.name = "";
+	null_point.type = 0;
+
+	qt.push_back({ "para_n",SEM.TOP(),null_point,null_point });//Õ»¶¥ÄÚÈÝ¼´Îªº¯Êý²ÎÊý£¬Ò²ÊÇ×ó²Ù×÷Êý
+
+	SEM.POP();
+}
+
+
+
+void divide()//»ù±¾¿é»®·Ö
+{
+	int num = 1;
+	vector<QT>::iterator QTit;
+	QT QTtemp;
+	for (QTit = qt.begin(); QTit != qt.end(); QTit++)//±éÀúÒ»Õû¸ö»ù±¾¿é
+	{
+		QTtemp = *QTit;
+		QTit->block = num;
+		if (QTtemp.Operat == "if" || QTtemp.Operat == "el" || QTtemp.Operat == "ie" || QTtemp.Operat == "do" || QTtemp.Operat == "we" || QTtemp.Operat == "wh" || QTtemp.Operat == "for" || QTtemp.Operat == "fordo" || QTtemp.Operat == "jumpdo" || QTtemp.Operat == "dos" || QTtemp.Operat == "doe" || QTtemp.Operat == "fore" || QTtemp.Operat == "call" || QTtemp.Operat == "RET" || QTtemp.Operat == "para" || QTtemp.Operat == "MAIN" || QTtemp.Operat == "FUNC" || QTtemp.Operat == "para_n")
+		{
+			num++;
+		}
+	}
+	QT abc;
+	abc.block = 0;
+	qt.push_back(abc);
+}
+
+
