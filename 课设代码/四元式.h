@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #ifndef _HEAD3_H
 #define _HEAD3_H
 #define _HEAD_QT
@@ -99,6 +100,7 @@ Type stringToNum(const string& str)
 extern mystack<token> SEM;
 bool CompareType();
 string resvalue(string opeart);
+void ASSI();
 void WriteinFileL(string name, string content);
 void PUSHSEM(token operand);//写入文件
 void GEQ(string operat);
@@ -112,4 +114,11 @@ void WE();
 void RET();//RETURN语句：第一操作数
 void WriteQt(string name, string content);//四元式写入文件
 
+void FUNC();//定义函数开始语句，第一操作数为函数名
+void MAIN();//主函数开始语句
+void PARA();//函数参数
+void CALL();//过程调用：第一操作数调用函数名
+void RET();//RETURN语句：第一操作数
+void divide();//划分基本块
+void PARA_n();//形参
 #endif

@@ -1,14 +1,12 @@
 #pragma once
+#pragma once
 #ifndef _HEAD4_H
 #define _HEAD4_H
 #include<string>
 #include<vector>
 #include<iostream>
 #include<queue>
-#include<fstream>
-
 #include"Óï·¨·ÖÎö.h"
-
 using namespace std;
 
 struct TypeSheet;
@@ -29,7 +27,7 @@ struct ArrSheet {
 struct TypeSheet //ÀàĞÍ±í
 {
 	string typevalue;		//ÀàĞÍ±àÂë£ºint,float ,char ,double
-	ArrSheet* tpoint;		//¸ù¾İÀàĞÍ±àÂëÌø×ªµ½²»Í¬µÄĞÅÏ¢±íÏîÄ¿£¨Ä¿Ç°Ö»ÓĞÊı×é±í)
+	ArrSheet* tpoint;		//¸ù¾İÀàĞÍ±àÂëÌø×ªµ½²»Í¬µÄĞÅÏ¢±íÏîÄ¿
 };
 
 struct MainSheet //·ûºÅ×Ü±í
@@ -71,6 +69,7 @@ struct SynbollistToFunc {		//Ò»¸öº¯Êı¶ÔÓ¦Ò»ÕÅ·ûºÅ±í
 	int offset_max;				//µ±Ç°offset×î´óÖµ
 };
 
+
 extern vector<SynbollistToFunc*> synbollist_main_g;        //·ûºÅ×Ü±í 
 extern SynbollistToFunc* synbollistToFunc_g;			   //º¯ÊıËù¶ÔÓ¦µÄ·ûºÅ±íµÄÖ¸Õë
 extern SynbollistToFunc* globalsynbollistToFunc_g;		   //È«¾Ö±äÁ¿ËùÒªÌîÈëµÄµØ·½	
@@ -84,29 +83,27 @@ extern LevelAndOffsetAndValue* levelAndOffsetAndValue_g;		   //LevelAndOffset±íÖ
 
 extern string type_g;	//ÓÃÓÚÔİÊ±±£´æÀàĞÍ
 extern string id_g;		//ÓÃÓÚÔİÊ±±£´æ±êÊ¶·ûµÄÃû×Ö
-
 extern int fnum_g;		//¼ÇÂ¼ĞÎ²Î¸öÊı
 extern int offset_g;	//¼ÇÂ¼offsetÖµ
-
 extern int global_offset_g;	//¼ÇÂ¼È«¾ÖoffsetÖµ
-
 extern queue<MainSheet*> tempMainSheetpointers;	 //ÓÃÓÚÔİÊ±±£´æMainSheet¶ÔÏóµÄÖ¸Õë
 
 
 bool checkGlobalNum(string str);
 bool checkSynbollistToFuncNum(string str);
-
-
 void checkSynbollist_main(string str);		//²éÖØ·ûºÅ×Ü±í
 void checkSynbollistToFunc(string funcId, string str);		//²éÖØº¯Êı·ûºÅ±í
 void checkParas(string str);				//²éÖØĞÎ²Î±í
 void checkGlobal(string str);				//²éÖØÈ«¾Ö±äÁ¿
 
 
+
 //ÎªÁËÊµÏÖÕâ6¸öº¯Êı£¬¶¨ÒåÒ»Ğ©Ä£¿é»¯º¯Êı......
 void writeTypeSheet(string type);							//Ğ´Ò»ÕÅÀàĞÍ±í ²ÎÊı:ÀàĞÍ
 void writeLevelAndOffsetAndValue(int level, int offset);		//Ğ´Ò»ÕÅLevelAndOffsetAndValue±í£¬valueÔİÊ±Ìî²»ÁË
 void showErrowWhenCreateASheet(string str);
+
+
 
 
 /*¸ß¼¶Êä³öº¯Êı*/
@@ -142,12 +139,8 @@ void deleteFuncSheet(FuncSheet* funcSheet_p);   //ÍêÈ«Ïú»ÙÒ»¸öFuncSheet¶ÔÏó
 void deletePara(ParaSheet* para_p);				//ÍêÈ«Ïú»ÙÒ»¸öParaSheet¶ÔÏó
 /*µ×²ãÇåÀíº¯Êı*/
 
-//void deleteLenSheet(LenSheet* lenSheet_p);			//ÍêÈ«Ïú»ÙÒ»¸öLenSheet¶ÔÏó
-//void deleteArrSheet(ArrSheet* arrSheet_p);			//ÍêÈ«Ïú»ÙÒ»¸öArrSheet¶ÔÏó
 
-
-
-/*×îÖÕÒªÊµÏÖµÄ7¸öº¯Êı*/
+/*½Ó¿Úº¯Êı*/
 //Ã»²éµ½·µ»Øno
 string searchType(string funcname, string name);//²é·ÇÈ«¾ÖÓÃ»§¶¨ÒåºÍÁÙÊ±±äÁ¿ÀàĞÍ
 string searchType(string name);//²éÈ«¾ÖÓÃ»§¶¨Òå±äÁ¿ÀàĞÍ
@@ -157,7 +150,7 @@ void saveTemp(string funcname, string name, string type, string value);//±£´æÁÙÊ
 void saveAdmin(string funcname, string name, string value);//±£´æÓÃ»§µÄ·ÇÈ«¾Ö±äÁ¿µÄÀàĞÍºÍÖµ
 void saveGlobal(string name, string value);			//±£´æÓÃ»§¶¨ÒåµÄÈ«¾Ö±äÁ¿
 void saveGlobal(string name, string type, string value); //±£´æÁÙÊ±È«¾Ö±äÁ¿
-/*×îÖØÒªÊµÏÖµÄ7¸öº¯Êı*/
+/*½Ó¿Úº¯Êı*/
 
 
 void writeGlobalToFile(string fileName);
@@ -171,551 +164,5 @@ void writeParaSheetToFile(string funcName, ParaSheet* paraSheet);
 
 string TypeOfPara(string funcName, int pos);//·µ»Øº¯Êı¶ÔÓ¦Î»ÖÃĞÎ²ÎÀàĞÍ
 int NumOfPara(string fucName);//·µ»Øº¯ÊıĞÎ²Î¸öÊı
-
-
-void checkSynbollist_main(string str) {		//²éÖØ·ûºÅ×Ü±í£¨¼´²éÊÇ·ñº¯ÊıÖØ¶¨Òå£©
-	for (unsigned i = 0; i < synbollist_main_g.size(); i++) {
-		if (str == synbollist_main_g.at(i)->func) {
-			string s = str + "ÖØ¶¨Òå";
-			clearAll_g();
-			clearLists();
-			clearGlobalVariable();
-			ErrorAndShow(token_g.row, token_g.content, s);
-		}
-	}
-}
-void checkSynbollistToFunc(string funcId, string str) {	//²éÖØº¯Êı·ûºÅ±í£¨²é¾Ö²¿±äÁ¿ÊÇ·ñÖØ¶¨Òå£©
-	for (unsigned i = 0; i < synbollistToFunc_g->synbollist.size(); i++) {
-		if (str == synbollistToFunc_g->synbollist.at(i)->content) {
-			string s = str + "ÖØ¶¨Òå";
-			clearAll_g();
-			clearLists();
-			clearGlobalVariable();
-			ErrorAndShow(token_g.row, token_g.content, s);
-		}
-	}
-}
-
-void checkParas(string str) {				//²éÖØĞÎ²Î±í(²éĞÎ²ÎÊÇ·ñÖØ¶¨Òå)
-	for (unsigned i = 0; i < paras_g->size(); i++) {
-		if (str == paras_g->at(i)->content) {
-			string s = str + "ÖØ¶¨Òå";
-			clearAll_g();
-			clearLists();
-			clearGlobalVariable();
-			ErrorAndShow(token_g.row, token_g.content, s);
-		}
-	}
-}
-
-void checkGlobal(string str) {				//²éÖØÈ«¾Ö±äÁ¿
-	for (unsigned i = 0; i < globalsynbollistToFunc_g->synbollist.size(); i++) {
-		if (str == globalsynbollistToFunc_g->synbollist.at(i)->content) {
-			string s = "È«¾Ö±äÁ¿" + str + "ÖØ¶¨Òå";
-			clearAll_g();
-			clearLists();
-			clearGlobalVariable();
-			ErrorAndShow(token_g.row, token_g.content, s);
-		}
-	}
-}
-
-
-bool checkGlobalNum(string str) {
-	for (unsigned i = 0; i < globalsynbollistToFunc_g->synbollist.size(); i++) {
-		if (str == globalsynbollistToFunc_g->synbollist.at(i)->content) {
-			return true;
-		}
-	}
-	return false;
-}
-
-bool checkSynbollistToFuncNum(string str) {
-	for (unsigned i = 0; i < synbollistToFunc_g->synbollist.size(); i++) {
-		if (str == synbollistToFunc_g->synbollist.at(i)->content) {
-			return true;
-		}
-	}
-	return false;
-}
-
-
-
-
-//ÎªÁËÊµÏÖÕâ6¸öº¯Êı£¬¶¨ÒåÒ»Ğ©Ä£¿é»¯º¯Êı......
-
-void writeTypeSheet(string type) {		//Ğ´Ò»ÕÅÀàĞÍ±í
-	if (typeSheet_g == NULL) {
-		typeSheet_g = new TypeSheet;
-		typeSheet_g->typevalue = type;
-		typeSheet_g->tpoint = NULL;
-	}
-	else {
-		showErrowWhenCreateASheet("TypeSheet");
-	}
-}
-
-void writeLevelAndOffsetAndValue(int level, int offset) {	//Ğ´Ò»ÕÅ±í£¬ÕâÕÅ±í´æµÄÊÇ level offset vlaue
-	if (levelAndOffsetAndValue_g == NULL) {
-		levelAndOffsetAndValue_g = new LevelAndOffsetAndValue;
-		levelAndOffsetAndValue_g->level = level;
-		levelAndOffsetAndValue_g->offset = offset;
-		levelAndOffsetAndValue_g->value = "I don't know till now";
-	}
-	else {
-		showErrowWhenCreateASheet("LevelAndOffsetAndValue");
-	}
-}
-
-
-void showErrowWhenCreateASheet(string str) {
-	string s = "ÔÚ´´½¨Ò»¸ö" + str + "¶ÔÏóÊ±³öÏÖ³åÍ»";
-	clearAll_g();
-	clearLists();
-	clearGlobalVariable();
-	ErrorAndShow(token_g.row, token_g.content, s);
-}
-
-/*¸ß¼¶Êä³öº¯Êı*/
-void printGlobal() {											//Êä³öÈ«¾Ö±äÁ¿
-	for (unsigned i = 0; i < globalsynbollistToFunc_g->synbollist.size(); i++) {
-		printMainSheet(globalsynbollistToFunc_g->synbollist.at(i));
-	}
-}
-void printSynbollistMain_g() {								//Êä³ö·ûºÅ×Ü±íµÄËùÓĞÄÚÈİ
-	for (unsigned int i = 0; i < synbollist_main_g.size(); i++) {
-		for (unsigned int j = 0; j < synbollist_main_g.at(i)->synbollist.size(); j++) {
-			printMainSheet(synbollist_main_g.at(i)->synbollist.at(j));
-		}
-	}
-}
-/*µ×²ãÊä³öº¯Êı*/
-
-
-
-/*¸ß¼¶ÇåÀíº¯Êı*/
-void clearLists() {			//ÊÍ·ÅËùÓÃ´æÈë±íÖĞµÄÖ¸Õë
-	//synbollist_main_g
-	for (unsigned int i = 0; i < synbollist_main_g.size(); i++) {
-		for (unsigned int j = 0; j < synbollist_main_g.at(i)->synbollist.size(); j++) {
-			deleteMainSheet(synbollist_main_g.at(i)->synbollist.at(j));
-		}
-		delete synbollist_main_g.at(i);
-	}
-}
-
-void clearAll_g() {			//ÊÍ·ÅËùÓĞÈ«¾ÖÖ¸ÕëºÍ¶ÓÁĞÖĞµÄÖ¸Õë,Ö»ÓĞÔÚ³ö´íÊ±»áµ÷ÓÃ
-	delete synbollistToFunc_g;			   //º¯ÊıËù¶ÔÓ¦µÄ·ûºÅ±íµÄÖ¸Õë
-	delete mainSheet_g;					   //·ûºÅ±íÏîÖ¸Õë
-	delete typeSheet_g;					   //ÀàĞÍ±íÖ¸Õë
-	delete funcSheet_g;					   //º¯Êı±íÖ¸Õë
-	delete paras_g;						   //²ÎÊı±íÖ¸Õë
-	delete para_g;						   //²ÎÊı±íÏîÖ¸Õë
-	delete levelAndOffsetAndValue_g;	   //LevelAndOffset±íÖ¸Õë
-	//ÊÍ·Å¶ÓÁĞÖ¸Õë
-	while (!tempMainSheetpointers.empty()) {
-		delete tempMainSheetpointers.front();
-		tempMainSheetpointers.pop();
-	}
-}
-
-void clearGlobalVariable() {	//ÊÍ·ÅÈ«¾Ö±äÁ¿£¨ÓÉglobalsynbollistToFunc_gÖ¸Ïò£©
-	for (unsigned i = 0; i < globalsynbollistToFunc_g->synbollist.size(); i++) {
-		deleteMainSheet(globalsynbollistToFunc_g->synbollist.at(i));
-	}
-}
-/*¸ß¼¶ÇåÀíº¯Êı*/
-
-
-
-/*µ×²ãÊä³öº¯Êı*/
-void printMainSheet(MainSheet* mainSheet) {				//Êä³öMainSheet±í	
-	cout << "MainSheet±íÄÚÈİ: " << endl;
-	cout << "±êÊ¶·ûÃû×Ö: " << mainSheet->content << endl;
-	cout << "±êÊ¶·ûÀàĞÍ: " << endl; printTypeSheet(mainSheet->type);
-	cout << "±êÊ¶·ûÖÖÀà: " << mainSheet->category << endl;
-	if (mainSheet->flag == 0) {
-		printfFuncSheet((FuncSheet*)mainSheet->addr);
-	}
-	else if (mainSheet->flag == 1) {
-		printLevelAndOffsetAndValue((LevelAndOffsetAndValue*)mainSheet->addr);
-	}
-}
-void printTypeSheet(TypeSheet* typeSheet) {					//Êä³öTypeSheet±í
-	cout << "----" << "TypeSheet±íÄÚÈİ: " << endl;
-	cout << "    " << "typeValue: " << typeSheet->typevalue << endl;
-	//ÒòÎªÄ¿Ç°Ã»ÓĞÊı×éºÍ½á¹¹ÌåËùÒÔtypeSheetµÄÖ¸ÕëÏîÎª¿Õ
-	cout << endl;
-}
-void printLevelAndOffsetAndValue(LevelAndOffsetAndValue* levelAndOffsetAndValue) {	//Êä³öLevelAndOffset±í
-	cout << "----" << "LevelAndOffset±íÄÚÈİ: " << endl;
-	cout << "    " << "level:  " << levelAndOffsetAndValue->level << endl;
-	cout << "    " << "offset: " << levelAndOffsetAndValue->offset << endl;
-	cout << "    " << "vlaue:  " << levelAndOffsetAndValue->value << endl;
-}
-void printfFuncSheet(FuncSheet* funcsheet) {				//º¯Êı±íÊä³ö
-	cout << "----" << "º¯Êı±íÄÚÈİ: " << endl;
-	cout << "    " << "º¯Êı²ã´Î: " << funcsheet->level << endl;
-	cout << "    " << "ĞÎ²Î¸öÊı: " << funcsheet->fnum << endl;
-	cout << "    " << "Èë¿ÚµØÖ·: " << funcsheet->entry << endl;
-	cout << "    " << "²ÎÊı±í: " << endl;
-	for (unsigned i = 0; i < funcsheet->para->size(); i++) {
-		printParaSheet(funcsheet->para->at(i));
-	}
-	cout << endl;
-}
-void printParaSheet(ParaSheet* paraSheet) {					//Êä³öĞÎ²Î±í
-	cout << "----" << "Para±íÄÚÈİ: " << endl;
-	cout << "    " << "ĞÎ²ÎÃû: " << paraSheet->content << endl;
-	cout << "    " << "ĞÎ²ÎÀàĞÍ: "; printTypeSheet(paraSheet->type);
-	cout << "    " << "ĞÎ²Î±íµÄLevelAndOffsetAndValue±í: "; printLevelAndOffsetAndValue(paraSheet->addr);
-	cout << endl;
-}
-/*µ×²ãÊä³öº¯Êı*/
-
-
-
-/*µ×²ãÇåÀíº¯Êı*/
-void deleteMainSheet(MainSheet* mainSheet_p) {	//ÍêÈ«Ïú»ÙÒ»¸öMainSheet¶ÔÏó
-	if (mainSheet_p->flag == 0) {
-		deleteFuncSheet((FuncSheet*)mainSheet_p->addr);
-	}
-	else if (mainSheet_p->flag == 1) {
-		deleteLevelAndOffsetAndValue((LevelAndOffsetAndValue*)mainSheet_p->addr);
-	}
-	deleteTypeSheet(mainSheet_p->type);
-	delete mainSheet_p;
-	cout << "³É¹¦ÊÍ·ÅÁËÒ»¸öMainSheet¶ÔÏó" << endl;
-}
-void deleteTypeSheet(TypeSheet* typeSheet_p) {	//ÍêÈ«Ïú»ÙÒ»¸öTypeSheet¶ÔÏó
-	if (typeSheet_p == NULL)return;
-	delete typeSheet_p;
-	cout << "³É¹¦ÊÍ·ÅÁËÒ»¸öTypeSheet¶ÔÏó" << endl;
-}
-void deleteLevelAndOffsetAndValue(LevelAndOffsetAndValue* levelAndOffsetAndValue_p) {	//ÍêÈ«Ïú»ÙÒ»¸ölevelAndOffset¶ÔÏó
-	if (levelAndOffsetAndValue_p == NULL)return;
-	delete levelAndOffsetAndValue_p;
-	cout << "³É¹¦ÊÍ·ÅÁËÒ»¸öLevelAndOffsetAndValue¶ÔÏó" << endl;
-}
-void deleteFuncSheet(FuncSheet* funcSheet_p) {   //ÍêÈ«Ïú»ÙÒ»¸öFuncSheet¶ÔÏó
-	if (funcSheet_p == NULL) {
-		return;
-	}
-	for (unsigned i = 0; i < funcSheet_p->para->size(); i++) {
-		deletePara(funcSheet_p->para->at(i));
-	}
-	delete funcSheet_p;
-	cout << "³É¹¦ÊÍ·ÅÁËÒ»¸öFuncSheet¶ÔÏó" << endl;
-}
-void deletePara(ParaSheet* para_p) {				//ÍêÈ«Ïú»ÙÒ»¸öParaSheet¶ÔÏó
-	deleteLevelAndOffsetAndValue(para_p->addr);
-	deleteTypeSheet(para_p->type);
-	delete para_p;
-	cout << "³É¹¦ÊÍ·ÅÁËÒ»¸öPara¶ÔÏó" << endl;
-}
-/*µ×²ãÇåÀíº¯Êı*/
-
-
-/*×îÖÕÒªÊµÏÖµÄ7¸öº¯Êı*/
-//Ã»²éµ½·µ»Øno
-string searchType(string funcname, string name) {//²é·ÇÈ«¾ÖÓÃ»§¶¨ÒåºÍÁÙÊ±±äÁ¿ÀàĞÍ
-	for (unsigned i = 0; i < synbollist_main_g.size(); i++) {
-		if (synbollist_main_g.at(i)->func == funcname) {
-			for (unsigned j = 0; j < synbollist_main_g.at(i)->synbollist.size(); j++) {
-				if (synbollist_main_g.at(i)->synbollist.at(j)->content == name) {
-					return synbollist_main_g.at(i)->synbollist.at(j)->type->typevalue;
-				}
-			}
-		}
-	}
-	if (synbollistToFunc_g != NULL)
-	{
-		for (unsigned i = 0; i < synbollistToFunc_g->synbollist.size(); i++) {
-			if (synbollistToFunc_g->synbollist.at(i)->content == name) {
-				return synbollistToFunc_g->synbollist.at(i)->type->typevalue;
-			}
-		}
-	}
-	return "no";
-}
-
-string searchType(string name) {//²éÈ«¾ÖÓÃ»§¶¨Òå±äÁ¿ÀàĞÍ
-	for (unsigned i = 0; i < globalsynbollistToFunc_g->synbollist.size(); i++) {
-		if (globalsynbollistToFunc_g->synbollist.at(i)->content == name) {
-			return globalsynbollistToFunc_g->synbollist.at(i)->type->typevalue;
-		}
-	}
-	return "no";
-}
-string searchValue(string funcname, string name) {//²é·ÇÈ«¾Ö±äÁ¿ºÍÁÙÊ±±äÁ¿Öµ
-	for (unsigned i = 0; i < synbollist_main_g.size(); i++) {
-		if (synbollist_main_g.at(i)->func == funcname) {
-			for (unsigned j = 0; j < synbollist_main_g.at(i)->synbollist.size(); j++) {
-				if (synbollist_main_g.at(i)->synbollist.at(j)->content == name) {
-					if (synbollist_main_g.at(i)->synbollist.at(j)->category == "f") {
-						return ((FuncSheet*)synbollist_main_g.at(i)->synbollist.at(j)->addr)->value;
-					}
-					else {
-						if (((LevelAndOffsetAndValue*)(synbollist_main_g.at(i)->synbollist.at(j)->addr))->value != "I don't know till now") {
-							return ((LevelAndOffsetAndValue*)(synbollist_main_g.at(i)->synbollist.at(j)->addr))->value;
-						}
-						else {
-							return "no";
-						}
-					}
-				}
-			}
-		}
-	}
-	if (synbollistToFunc_g != NULL) {
-		for (unsigned i = 0; i < synbollistToFunc_g->synbollist.size(); i++) {
-			if (name == synbollistToFunc_g->synbollist.at(i)->content) {
-				if (((LevelAndOffsetAndValue*)(synbollistToFunc_g->synbollist.at(i))->addr)->value != "I don't know till now") {
-					return ((LevelAndOffsetAndValue*)(synbollistToFunc_g->synbollist.at(i))->addr)->value;
-				}
-				else {
-					return "no";
-				}
-			}
-		}
-	}
-
-	return "no";
-}
-string searchValue(string name) {//²éÈ«¾ÖÓÃ»§¶¨Òå±äÁ¿Öµ
-	for (unsigned i = 0; i < globalsynbollistToFunc_g->synbollist.size(); i++) {
-		if (globalsynbollistToFunc_g->synbollist.at(i)->content == name) {
-			if (((LevelAndOffsetAndValue*)(globalsynbollistToFunc_g->synbollist.at(i)->addr))->value != "I don't know till now") {
-				return ((LevelAndOffsetAndValue*)(globalsynbollistToFunc_g->synbollist.at(i)->addr))->value;
-			}
-			else {
-				return "no";
-			}
-		}
-	}
-	return "no";
-}
-void saveTemp(string funcname, string name, string type, string value) {//±£´æÁÙÊ±±äÁ¿ÀàĞÍºÍÖµ
-	for (unsigned i = 0; i < synbollist_main_g.size(); i++) {
-		if (funcname == synbollist_main_g.at(i)->func) {
-			MainSheet* tempMainSheet;
-
-			tempMainSheet = new MainSheet;
-			tempMainSheet->content = name;
-			tempMainSheet->category = "vt";
-			tempMainSheet->flag = 1;
-			writeTypeSheet(type);
-			tempMainSheet->type = typeSheet_g;
-			typeSheet_g = NULL;
-			writeLevelAndOffsetAndValue(((LevelAndOffsetAndValue*)(synbollist_main_g.at(i)->synbollist.at(0)->addr))->level, synbollist_main_g.at(i)->offset_max);
-			if (type == "char") {
-				synbollist_main_g.at(i)->offset_max += 1;
-			}
-			else if (type == "int") {
-				synbollist_main_g.at(i)->offset_max += 4;
-			}
-			else if (type == "double") {
-				synbollist_main_g.at(i)->offset_max += 8;
-			}
-			else if (type == "float") {
-				synbollist_main_g.at(i)->offset_max += 4;
-			}
-			levelAndOffsetAndValue_g->value = value;
-			tempMainSheet->addr = levelAndOffsetAndValue_g;
-			levelAndOffsetAndValue_g = NULL;
-			synbollist_main_g.at(i)->synbollist.push_back(tempMainSheet);
-			tempMainSheet = NULL;
-			return;
-
-		}
-	}
-
-	if (synbollistToFunc_g != NULL && synbollistToFunc_g->func == funcname) {
-		MainSheet* tempMainSheet;
-
-		tempMainSheet = new MainSheet;
-		tempMainSheet->content = name;
-		tempMainSheet->category = "vt";
-		tempMainSheet->flag = 1;
-		writeTypeSheet(type);
-		tempMainSheet->type = typeSheet_g;
-		typeSheet_g = NULL;
-		writeLevelAndOffsetAndValue(((LevelAndOffsetAndValue*)(synbollistToFunc_g->synbollist.at(0)->addr))->level, synbollistToFunc_g->offset_max);
-		if (type == "char") {
-			synbollistToFunc_g->offset_max += 1;
-		}
-		else if (type == "int") {
-			synbollistToFunc_g->offset_max += 4;
-		}
-		else if (type == "double") {
-			synbollistToFunc_g->offset_max += 8;
-		}
-		else if (type == "float") {
-			synbollistToFunc_g->offset_max += 4;
-		}
-		levelAndOffsetAndValue_g->value = value;
-		tempMainSheet->addr = levelAndOffsetAndValue_g;
-		levelAndOffsetAndValue_g = NULL;
-		synbollistToFunc_g->synbollist.push_back(tempMainSheet);
-		tempMainSheet = NULL;
-
-	}
-
-}
-void saveAdmin(string funcname, string name, string value) {//±£´æÓÃ»§µÄ·ÇÈ«¾Ö±äÁ¿µÄÀàĞÍºÍÖµ
-	for (unsigned i = 0; i < synbollist_main_g.size(); i++) {
-		if (funcname == synbollist_main_g.at(i)->func) {
-			for (unsigned j = 0; j < synbollist_main_g.at(i)->synbollist.size(); j++) {
-				if (name == synbollist_main_g.at(i)->synbollist.at(j)->content) {
-					((LevelAndOffsetAndValue*)synbollist_main_g.at(i)->synbollist.at(j)->addr)->value = value;
-					return;
-				}
-			}
-		}
-	}
-	for (unsigned i = 0; i < synbollistToFunc_g->synbollist.size(); i++) {
-		if (name == synbollistToFunc_g->synbollist.at(i)->content) {
-			((LevelAndOffsetAndValue*)(synbollistToFunc_g->synbollist.at(i))->addr)->value = value;
-		}
-	}
-}
-void saveGlobal(string name, string value) {			//±£´æÓÃ»§¶¨ÒåµÄÈ«¾Ö±äÁ¿
-	unsigned i = 0;
-	for (i = 0; i < globalsynbollistToFunc_g->synbollist.size(); i++) {
-		if (name == globalsynbollistToFunc_g->synbollist.at(i)->content) {
-			((LevelAndOffsetAndValue*)(globalsynbollistToFunc_g->synbollist.at(i)->addr))->value = value;
-			break;
-		}
-	}
-	if (i == globalsynbollistToFunc_g->synbollist.size()) {
-		cout << "Ã»²éµ½Òª´æµÄ±äÁ¿" << endl;
-	}
-}
-
-void saveGlobal(string name, string type, string value) {			//±£´æÈ«¾ÖÁÙÊ±±äÁ¿
-
-	if (mainSheet_g == NULL) {
-		mainSheet_g = new MainSheet;
-		mainSheet_g->content = name;
-		mainSheet_g->category = "vt";
-		mainSheet_g->flag = 1;
-		writeTypeSheet(type);
-		mainSheet_g->type = typeSheet_g;
-		typeSheet_g = NULL;
-		writeLevelAndOffsetAndValue(0, global_offset_g);
-		if (type == "char") {
-			global_offset_g += 1;
-		}
-		else if (type == "int") {
-			global_offset_g += 4;
-		}
-		else if (type == "double") {
-			global_offset_g += 8;
-		}
-		else if (type == "float") {
-			global_offset_g += 4;
-		}
-		levelAndOffsetAndValue_g->value = value;
-		mainSheet_g->addr = levelAndOffsetAndValue_g;
-		levelAndOffsetAndValue_g = NULL;
-		globalsynbollistToFunc_g->synbollist.push_back(mainSheet_g);
-		mainSheet_g = NULL;
-	}
-	else {
-		showErrowWhenCreateASheet("MainSheet");
-	}
-
-}
-
-void writeGlobalToFile(string fileName) {
-	ofstream ofs(fileName, ios::app);
-	for (unsigned i = 0; i < globalsynbollistToFunc_g->synbollist.size(); i++) {
-		writeMainSheetToFile(fileName, globalsynbollistToFunc_g->synbollist.at(i));
-	}
-	ofs.close();
-}
-void writeSynbollistMain_gToFile(string fileName) {
-	ofstream ofs(fileName, ios::app);
-	for (unsigned int i = 0; i < synbollist_main_g.size(); i++) {
-		for (unsigned int j = 0; j < synbollist_main_g.at(i)->synbollist.size(); j++) {
-			writeMainSheetToFile(fileName, synbollist_main_g.at(i)->synbollist.at(j));
-		}
-	}
-	ofs.close();
-}
-
-
-void writeMainSheetToFile(string funcName, MainSheet* mainSheet) {
-	ofstream ofs(funcName, ios::app);
-	ofs << "Ö÷±íÄÚÈİ: " << endl;
-	ofs << "±êÊ¶·û: " << mainSheet->content << endl;
-	ofs << "ÀàĞÍ: " << endl; printTypeSheet(mainSheet->type);
-	ofs << "ÖÖÀà: " << mainSheet->category << endl;
-	if (mainSheet->flag == 0) {
-		writeFuncSheetToFile(funcName, (FuncSheet*)mainSheet->addr);
-	}
-	else if (mainSheet->flag == 1) {
-		writeLevelAndOffsetAndValueToFile(funcName, (LevelAndOffsetAndValue*)mainSheet->addr);
-	}
-	ofs << endl;
-	ofs.close();
-}
-void writeTypeSheetToFile(string funcName, TypeSheet* typeSheet) {
-	ofstream ofs(funcName, ios::app);
-	ofs << "----" << "TypeSheet±íÄÚÈİ: " << endl;
-	ofs << "    " << "typeValue: " << typeSheet->typevalue << endl;
-	//ÒòÎªÄ¿Ç°Ã»ÓĞÊı×éºÍ½á¹¹ÌåËùÒÔtypeSheetµÄÖ¸ÕëÏîÎª¿Õ
-	ofs << endl;
-	ofs.close();
-}
-void writeLevelAndOffsetAndValueToFile(string funcName, LevelAndOffsetAndValue* levelAndOffsetAndValue) {
-	ofstream ofs(funcName, ios::app);
-	ofs << "    " << "²ã´Î:  " << levelAndOffsetAndValue->level << endl;
-	ofs << "    " << "Çø¾à: " << levelAndOffsetAndValue->offset << endl;
-	ofs << "    " << "Öµ:  " << levelAndOffsetAndValue->value << endl;
-	ofs << endl;
-	ofs.close();
-}
-void writeFuncSheetToFile(string funcName, FuncSheet* funcsheet) {
-	ofstream ofs(funcName, ios::app);
-	ofs << "----" << "º¯Êı±íÄÚÈİ: " << endl;
-	ofs << "    " << "²ã´Î: " << funcsheet->level << endl;
-	ofs << "    " << "ĞÎ²Î¸öÊı: " << funcsheet->fnum << endl;
-	ofs << "    " << "Èë¿ÚµØÖ·: " << funcsheet->entry << endl;
-	for (unsigned i = 0; i < funcsheet->para->size(); i++) {
-		writeParaSheetToFile(funcName, funcsheet->para->at(i));
-	}
-	ofs << endl;
-	ofs.close();
-}
-void writeParaSheetToFile(string funcName, ParaSheet* paraSheet) {
-	ofstream ofs(funcName, ios::app);
-	ofs << "----" << "²ÎÊı±íÄÚÈİ: " << endl;
-	ofs << "    " << "ĞÎ²ÎÃû: " << paraSheet->content << endl;
-	ofs << "    " << "ĞÎ²ÎÀàĞÍ: "; writeTypeSheetToFile(funcName, paraSheet->type);
-	ofs << "    " << "ĞÎ²Î±íµÄLevelAndOffsetAndValue±í: "; writeLevelAndOffsetAndValueToFile(funcName, paraSheet->addr);
-	ofs << endl;
-	ofs.close();
-}
-
-/*×îÖØÒªÊµÏÖµÄ7¸öº¯Êı*/
-string TypeOfPara(string funcName, int pos) {
-	for (unsigned i = 0; i < synbollist_main_g.size(); i++) {
-		if (synbollist_main_g.at(i)->func == funcName) {
-			return synbollist_main_g.at(i)->synbollist.at(pos)->type->typevalue;
-		}
-	}
-	return "no";
-}
-
-//Í¨¹ıº¯ÊıÃû£¬·µ»ØĞÎ²Î¸öÊı
-int NumOfPara(string funcName) {
-	for (unsigned i = 0; i < synbollist_main_g.size(); i++) {
-		if (synbollist_main_g.at(i)->func == funcName) {
-			return ((FuncSheet*)(synbollist_main_g.at(i)->synbollist.at(0)->addr))->fnum;
-		}
-	}
-	return -1;
-}
 
 #endif
