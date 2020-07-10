@@ -1,8 +1,13 @@
+#pragma once
+#pragma once
+#ifndef _HEAD4_H
+#define _HEAD4_H
 #include<string>
 #include<vector>
 #include<iostream>
-
-//è¡¨çš„ç»“æ„å®šä¹‰*****************************
+#include<queue>
+#include"Óï·¨·ÖÎö.h"
+using namespace std;
 
 struct TypeSheet;
 struct MainSheet;
@@ -11,66 +16,153 @@ struct FuncSheet;
 struct ParaSheet;
 struct LevelAndOffsetAndValue;
 
-struct TypeSheet //ç±»å‹è¡¨
-{
-	string typevalue;		//ç±»å‹ç¼–ç ï¼šint,float ,char ,double
-	ArrSheet* tpoint;		//æ ¹æ®ç±»å‹ç¼–ç è·³è½¬åˆ°ä¸åŒçš„ä¿¡æ¯è¡¨é¡¹ç›®ï¼ˆç›®å‰åªæœ‰æ•°ç»„è¡¨)
-};
 
-struct MainSheet //ç¬¦å·æ€»è¡¨
-{
-	string content;			//æ ‡è¯†ç¬¦å
-	TypeSheet*  type;		//æŒ‡å‘ç±»å‹è¡¨
-	string category;		//ç§ç±»ç¼–ç ï¼Œ/*category      v:å˜é‡ï¼Œ vn:å½¢å‚ï¼Œ f:å‡½æ•°ï¼Œc:å¸¸é‡*/
-	void*  addr;			//æ ‡å¿—ï¼Œ0,addræŒ‡å‘å‡½æ•°è¡¨; 1,addræŒ‡å‘LevelAndOffsetAndValueè¡¨
-	int flag;				//åˆ¤æ–­åœ°å€æŒ‡å‘è¡¨ç±»å‹
-};
-
-struct ArrSheet {//æ•°ç»„è¡¨
+struct ArrSheet {
 	int low;
 	int up;
-	int clen;		//æ¯ä¸ªæˆå‘˜å å¤šé•¿
+	int clen;		//Ã¿¸ö³ÉÔ±Õ¼¶à³¤
 	TypeSheet* type;
 };
 
-struct FuncSheet //å‡½æ•°è¡¨
+struct TypeSheet //ÀàĞÍ±í
 {
-	int level;									//å±‚æ¬¡å·
-	int fnum;									//å½¢å‚ä¸ªæ•°
-	vector<ParaSheet*>* para;					//å‡½æ•°ä¸­çš„å½¢å‚è¡¨
-	string entry;								//å…¥å£åœ°å€ï¼Œè¯¥å‡½æ•°ç›®æ ‡ç¨‹åºé¦–åœ°å€(è¿è¡Œæ—¶å¡«å†™)ï¼›
-	string value;
-	//Vall* vall; //vallè¡¨
-	//int off;				//åŒºè·ç¦»ï¼Œè¯¥è¿‡å‡½è‡ªèº«æ•°æ®åŒºèµ·å§‹å•å…ƒç›¸å¯¹è¯¥è¿‡å‡½å€¼åŒºåŒºå¤´ä½ç½®
+	string typevalue;		//ÀàĞÍ±àÂë£ºint,float ,char ,double
+	ArrSheet* tpoint;		//¸ù¾İÀàĞÍ±àÂëÌø×ªµ½²»Í¬µÄĞÅÏ¢±íÏîÄ¿
 };
 
-struct ParaSheet {	//å½¢å‚è¡¨
-	string content;						//æ ‡è¯†ç¬¦å
-	TypeSheet*  type;					//æŒ‡å‘ç±»å‹è¡¨
-	LevelAndOffsetAndValue*  addr;		//æŒ‡å‘LevelAndOffsetè¡¨
+struct MainSheet //·ûºÅ×Ü±í
+{
+	string content;			//±êÊ¶·ûÃû
+	TypeSheet*  type;		//Ö¸ÏòÀàĞÍ±í
+	string category;		//ÖÖÀà±àÂë£¬/*category      v:±äÁ¿£¬ vn:ĞÎ²Î£¬ f:º¯Êı£¬c:³£Á¿*/
+	void*  addr;			//±êÖ¾£¬0,addrÖ¸Ïòº¯Êı±í; 1,addrÖ¸ÏòLevelAndOffsetAndValue±í
+	int flag;				//ÅĞ¶ÏµØÖ·Ö¸Ïò±íÀàĞÍ
+};
+
+struct ParaSheet {	//ĞÎ²Î±í
+	string content;						//±êÊ¶·ûÃû
+	TypeSheet*  type;					//Ö¸ÏòÀàĞÍ±í
+	LevelAndOffsetAndValue*  addr;		//Ö¸ÏòLevelAndOffset±í
+};
+
+struct FuncSheet
+{
+	int level;									//²ã´ÎºÅ
+	int fnum;									//ĞÎ²Î¸öÊı
+	vector<ParaSheet*>* para;					//º¯ÊıÖĞµÄĞÎ²Î±í
+	string entry;								//Èë¿ÚµØÖ·£¬¸Ãº¯ÊıÄ¿±ê³ÌĞòÊ×µØÖ·(ÔËĞĞÊ±ÌîĞ´)£»
+	string value;
+	//Vall* vall; //vall±í
+	//int off;				//Çø¾àÀë£¬¸Ã¹ıº¯×ÔÉíÊı¾İÇøÆğÊ¼µ¥ÔªÏà¶Ô¸Ã¹ıº¯ÖµÇøÇøÍ·Î»ÖÃ
 };
 
 struct LevelAndOffsetAndValue {
-	int level;				//å±‚æ¬¡å·
-	int offset;				//åç§»é‡
-	string value;			//å€¼
+	int level;				//²ã´ÎºÅ
+	int offset;				//Æ«ÒÆÁ¿
+	string value;			//Öµ
 };
 
-struct SynbollistToFunc {		//ä¸€ä¸ªå‡½æ•°å¯¹åº”ä¸€å¼ ç¬¦å·è¡¨
+
+struct SynbollistToFunc {		//Ò»¸öº¯Êı¶ÔÓ¦Ò»ÕÅ·ûºÅ±í
 	vector<MainSheet*> synbollist;
 	string func;
-	int offset_max;				//å½“å‰offsetæœ€å¤§å€¼
+	int offset_max;				//µ±Ç°offset×î´óÖµ
 };
 
-//è¡¨çš„ç»“æ„å®šä¹‰*****************************
+
+extern vector<SynbollistToFunc*> synbollist_main_g;        //·ûºÅ×Ü±í 
+extern SynbollistToFunc* synbollistToFunc_g;			   //º¯ÊıËù¶ÔÓ¦µÄ·ûºÅ±íµÄÖ¸Õë
+extern SynbollistToFunc* globalsynbollistToFunc_g;		   //È«¾Ö±äÁ¿ËùÒªÌîÈëµÄµØ·½	
+extern MainSheet* mainSheet_g;					   //·ûºÅ±íÏîÖ¸Õë
+extern TypeSheet* typeSheet_g;					   //ÀàĞÍ±íÖ¸Õë
+extern FuncSheet* funcSheet_g;					   //º¯Êı±íÖ¸Õë
+extern vector<ParaSheet*>* paras_g;				   //²ÎÊı±íÖ¸Õë
+extern ParaSheet* para_g;						   //²ÎÊı±íÏîÖ¸Õë
+extern LevelAndOffsetAndValue* levelAndOffsetAndValue_g;		   //LevelAndOffset±íÖ¸Õë
 
 
-extern vector<SynbollistToFunc*> synbollist_main_g;        //ç¬¦å·æ€»è¡¨ 
-extern SynbollistToFunc* synbollistToFunc_g;			   //å‡½æ•°æ‰€å¯¹åº”çš„ç¬¦å·è¡¨çš„æŒ‡é’ˆ
-extern SynbollistToFunc* globalsynbollistToFunc_g;		   //å…¨å±€å˜é‡æ‰€è¦å¡«å…¥çš„åœ°æ–¹	
-extern MainSheet* mainSheet_g;					   //ç¬¦å·è¡¨é¡¹æŒ‡é’ˆ
-extern TypeSheet* typeSheet_g;					   //ç±»å‹è¡¨æŒ‡é’ˆ
-extern FuncSheet* funcSheet_g;					   //å‡½æ•°è¡¨æŒ‡é’ˆ
-extern vector<ParaSheet*>* paras_g;				   //å‚æ•°è¡¨æŒ‡é’ˆ
-extern ParaSheet* para_g;						   //å‚æ•°è¡¨é¡¹æŒ‡é’ˆ
-extern LevelAndOffsetAndValue* levelAndOffsetAndValue_g;		   //LevelAndOffsetè¡¨æŒ‡é’ˆ
+extern string type_g;	//ÓÃÓÚÔİÊ±±£´æÀàĞÍ
+extern string id_g;		//ÓÃÓÚÔİÊ±±£´æ±êÊ¶·ûµÄÃû×Ö
+extern int fnum_g;		//¼ÇÂ¼ĞÎ²Î¸öÊı
+extern int offset_g;	//¼ÇÂ¼offsetÖµ
+extern int global_offset_g;	//¼ÇÂ¼È«¾ÖoffsetÖµ
+extern queue<MainSheet*> tempMainSheetpointers;	 //ÓÃÓÚÔİÊ±±£´æMainSheet¶ÔÏóµÄÖ¸Õë
+
+
+bool checkGlobalNum(string str);
+bool checkSynbollistToFuncNum(string str);
+void checkSynbollist_main(string str);		//²éÖØ·ûºÅ×Ü±í
+void checkSynbollistToFunc(string funcId, string str);		//²éÖØº¯Êı·ûºÅ±í
+void checkParas(string str);				//²éÖØĞÎ²Î±í
+void checkGlobal(string str);				//²éÖØÈ«¾Ö±äÁ¿
+
+
+
+//ÎªÁËÊµÏÖÕâ6¸öº¯Êı£¬¶¨ÒåÒ»Ğ©Ä£¿é»¯º¯Êı......
+void writeTypeSheet(string type);							//Ğ´Ò»ÕÅÀàĞÍ±í ²ÎÊı:ÀàĞÍ
+void writeLevelAndOffsetAndValue(int level, int offset);		//Ğ´Ò»ÕÅLevelAndOffsetAndValue±í£¬valueÔİÊ±Ìî²»ÁË
+void showErrowWhenCreateASheet(string str);
+
+
+
+
+/*¸ß¼¶Êä³öº¯Êı*/
+void printGlobal();											//Êä³öÈ«¾Ö±äÁ¿
+void printSynbollistMain_g();								//Êä³ö·ûºÅ×Ü±íµÄËùÓĞÄÚÈİ
+/*¸ß¼¶Êä³öº¯Êı*/
+
+
+
+/*¸ß¼¶ÇåÀíº¯Êı*/
+void clearLists();			//ÊÍ·ÅËùÓÃ´æÈë±íÖĞµÄÖ¸Õë
+void clearAll_g();			//ÊÍ·ÅËùÓĞÈ«¾ÖÖ¸Õë
+void clearGlobalVariable();	//ÊÍ·ÅÈ«¾Ö±äÁ¿£¨ÓÉglobalsynbollistToFunc_gÖ¸Ïò£©
+/*¸ß¼¶ÇåÀíº¯Êı*/
+
+
+
+/*µ×²ãÊä³öº¯Êı*/
+void printMainSheet(MainSheet* mainSheet);					//Êä³öMainSheet±í	
+void printTypeSheet(TypeSheet* typeSheet);					//Êä³öTypeSheet±í
+void printLevelAndOffsetAndValue(LevelAndOffsetAndValue* levelAndOffsetAndValue);	//Êä³öLevelAndOffset±í
+void printfFuncSheet(FuncSheet* funcsheet);					//º¯Êı±íÊä³ö
+void printParaSheet(ParaSheet* paraSheet);					//Êä³öĞÎ²Î±í
+/*µ×²ãÊä³öº¯Êı*/
+
+
+
+/*µ×²ãÇåÀíº¯Êı*/
+void deleteMainSheet(MainSheet* mainSheet_p);	//ÍêÈ«Ïú»ÙÒ»¸öMainSheet¶ÔÏó
+void deleteTypeSheet(TypeSheet* typeSheet_p);	//ÍêÈ«Ïú»ÙÒ»¸öTypeSheet¶ÔÏó
+void deleteLevelAndOffsetAndValue(LevelAndOffsetAndValue* levelAndOffsetAndValue_p);	//ÍêÈ«Ïú»ÙÒ»¸ölevelAndOffset¶ÔÏó
+void deleteFuncSheet(FuncSheet* funcSheet_p);   //ÍêÈ«Ïú»ÙÒ»¸öFuncSheet¶ÔÏó
+void deletePara(ParaSheet* para_p);				//ÍêÈ«Ïú»ÙÒ»¸öParaSheet¶ÔÏó
+/*µ×²ãÇåÀíº¯Êı*/
+
+
+/*½Ó¿Úº¯Êı*/
+//Ã»²éµ½·µ»Øno
+string searchType(string funcname, string name);//²é·ÇÈ«¾ÖÓÃ»§¶¨ÒåºÍÁÙÊ±±äÁ¿ÀàĞÍ
+string searchType(string name);//²éÈ«¾ÖÓÃ»§¶¨Òå±äÁ¿ÀàĞÍ
+string searchValue(string funcname, string name);//²é·ÇÈ«¾Ö±äÁ¿ºÍÁÙÊ±±äÁ¿Öµ
+string searchValue(string name);//²éÈ«¾ÖÓÃ»§¶¨Òå±äÁ¿Öµ
+void saveTemp(string funcname, string name, string type, string value);//±£´æÁÙÊ±±äÁ¿ÀàĞÍºÍÖµ
+void saveAdmin(string funcname, string name, string value);//±£´æÓÃ»§µÄ·ÇÈ«¾Ö±äÁ¿µÄÀàĞÍºÍÖµ
+void saveGlobal(string name, string value);			//±£´æÓÃ»§¶¨ÒåµÄÈ«¾Ö±äÁ¿
+void saveGlobal(string name, string type, string value); //±£´æÁÙÊ±È«¾Ö±äÁ¿
+/*½Ó¿Úº¯Êı*/
+
+
+void writeGlobalToFile(string fileName);
+void writeSynbollistMain_gToFile(string fileName);
+
+void writeMainSheetToFile(string funcName, MainSheet* mainSheet);
+void writeTypeSheetToFile(string funcName, TypeSheet* typeSheet);
+void writeLevelAndOffsetAndValueToFile(string funcName, LevelAndOffsetAndValue* levelAndOffsetAndValue);	//Êä³öLevelAndOffset±í
+void writeFuncSheetToFile(string funcName, FuncSheet* funcsheet);					//º¯Êı±íÊä³ö
+void writeParaSheetToFile(string funcName, ParaSheet* paraSheet);
+
+string TypeOfPara(string funcName, int pos);//·µ»Øº¯Êı¶ÔÓ¦Î»ÖÃĞÎ²ÎÀàĞÍ
+int NumOfPara(string fucName);//·µ»Øº¯ÊıĞÎ²Î¸öÊı
+
+#endif
